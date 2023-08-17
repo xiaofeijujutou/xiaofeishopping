@@ -14,10 +14,16 @@
     <name>coupon</name>
     <description>打折</description>
     <properties>
-        <java.version>17</java.version>
-        <spring-cloud.version>2022.0.4</spring-cloud.version>
+        <java.version>1.8</java.version>
+        <spring-cloud.version>Greenwich.SR3</spring-cloud.version>
     </properties>
     <dependencies>
+        <!--        小肥mall的Comment依赖-->
+        <dependency>
+            <groupId>com.xiaofei</groupId>
+            <artifactId>xiaofeimall-comment</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>

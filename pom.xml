@@ -17,5 +17,11 @@
         <module>order</module>
         <module>ware</module>
         <module>product</module>
+        <module>renren-fast</module>
+        <module>renren-generator-master</module>
+        <module>xiaofeimall-comment</module>
     </modules>
+
+
 </project>
+

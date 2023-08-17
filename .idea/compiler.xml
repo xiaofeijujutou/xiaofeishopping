@@ -2,23 +2,30 @@
 <project version="4">
   <component name="CompilerConfiguration">
     <annotationProcessing>
+      <profile default="true" name="Default" enabled="true" />
       <profile name="Maven default annotation processors profile" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="product" />
-        <module name="coupon" />
-        <module name="order" />
         <module name="menber" />
+        <module name="order" />
+        <module name="xiaofeimallcomment" />
+        <module name="renren-fast" />
         <module name="ware" />
+        <module name="coupon" />
+        <module name="renren-generator" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="coupon" target="17" />
-      <module name="menber" target="17" />
-      <module name="order" target="17" />
-      <module name="product" target="17" />
-      <module name="ware" target="17" />
+      <module name="coupon" target="1.8" />
+      <module name="menber" target="1.8" />
+      <module name="order" target="1.8" />
+      <module name="product" target="1.8" />
+      <module name="renren-fast" target="1.8" />
+      <module name="renren-generator" target="1.8" />
+      <module name="ware" target="1.8" />
+      <module name="xiaofeimallcomment" target="8" />
       <module name="xiaofeitoutoushopping" target="1.5" />
     </bytecodeTargetLevel>
   </component>
@@ -28,6 +35,8 @@
       <module name="menber" options="-parameters" />
       <module name="order" options="-parameters" />
       <module name="product" options="-parameters" />
+      <module name="renren-fast" options="-parameters" />
+      <module name="renren-generator" options="-parameters" />
       <module name="ware" options="-parameters" />
     </option>
   </component>
