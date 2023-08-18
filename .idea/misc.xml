@@ -14,6 +14,7 @@
         <option value="$PROJECT_DIR$/pom.xml" />
         <option value="$PROJECT_DIR$/renren-fast/pom.xml" />
         <option value="$PROJECT_DIR$/renren-generator-master/pom.xml" />
+        <option value="$PROJECT_DIR$/gateway/pom.xml" />
       </list>
     </option>
   </component>

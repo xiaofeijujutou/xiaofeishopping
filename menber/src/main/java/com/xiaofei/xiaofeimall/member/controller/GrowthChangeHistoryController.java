@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Map;
 
 
+import com.xiaofei.xiaofeimall.member.feign.CouponFeignService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -30,7 +31,17 @@ import com.xiaofei.common.utils.R;
 public class GrowthChangeHistoryController {
     @Autowired
     private GrowthChangeHistoryService growthChangeHistoryService;
+    /**
+     * 测试一下
+     */
+    @Autowired
+    private CouponFeignService service ;
+    @RequestMapping("/test")
+    public R test(){
 
+        service.menberCoupens();
+        return null;
+    }
     /**
      * 列表
      */

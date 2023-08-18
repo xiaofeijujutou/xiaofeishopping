@@ -7,6 +7,7 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="gateway" />
         <module name="product" />
         <module name="menber" />
         <module name="order" />
@@ -19,6 +20,7 @@
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="coupon" target="1.8" />
+      <module name="gateway" target="1.8" />
       <module name="menber" target="1.8" />
       <module name="order" target="1.8" />
       <module name="product" target="1.8" />
@@ -32,6 +34,7 @@
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="coupon" options="-parameters" />
+      <module name="gateway" options="-parameters" />
       <module name="menber" options="-parameters" />
       <module name="order" options="-parameters" />
       <module name="product" options="-parameters" />

@@ -32,6 +32,15 @@ public class CouponController {
     private CouponService couponService;
 
     /**
+     * 远程调用, 返回某个用户的优惠券合集
+     */
+    @RequestMapping("/menber/list")
+    public R menberCoupens(){
+        System.out.println("===========>>>>>>>>>>>>");
+        return null;
+    }
+
+    /**
      * 列表
      */
     @RequestMapping("/list")

@@ -1,0 +1,9 @@
+
+spring:
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848
+#网关的配置端口是86, 所以所有请求都发给86然后由网关来分发;
+server:
+  port: 86
