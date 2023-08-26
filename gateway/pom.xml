@@ -24,6 +24,12 @@
             <artifactId>xiaofeimall-comment</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
+<!--        阿里云OOS的依赖-->
+<!--        <dependency>-->
+<!--            <groupId>com.aliyun.oss</groupId>-->
+<!--            <artifactId>aliyun-sdk-oss</artifactId>-->
+<!--            <version>3.5.0</version>-->
+<!--        </dependency>-->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-gateway</artifactId>

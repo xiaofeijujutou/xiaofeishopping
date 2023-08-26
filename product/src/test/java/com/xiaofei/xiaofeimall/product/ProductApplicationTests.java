@@ -1,5 +1,6 @@
 package com.xiaofei.xiaofeimall.product;
 
+//import com.aliyun.oss.OSSClient;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.xiaofei.xiaofeimall.product.entity.BrandEntity;
 import com.xiaofei.xiaofeimall.product.service.BrandService;
@@ -11,6 +12,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.annotation.Resource;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.lang.invoke.LambdaMetafactory;
 
 @RunWith(SpringRunner.class)
@@ -19,7 +22,16 @@ public class ProductApplicationTests {
 
     @Resource
     BrandService brandService;
-
+//    @Resource
+//    OSSClient ossClint;
+//    @Test
+//    public void upload() throws Exception{
+//        InputStream inputStream = new FileInputStream(
+//                "D:\\JavaProject\\谷粒商城\\renren-fast-vue-master\\static\\plugins\\ueditor-1.4.3.3\\dialogs\\image\\images\\alignicon.jpg");
+//        ossClint.putObject("xiaofeitoushopping", "alignicon.jpg", inputStream);
+//        ossClint.shutdown();
+//        System.out.println("上传完成");
+//    }
     @Test
     public void contextLoads() {
         BrandEntity brandEntity = new BrandEntity();

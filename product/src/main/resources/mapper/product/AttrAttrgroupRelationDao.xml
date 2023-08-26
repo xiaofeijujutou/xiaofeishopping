@@ -12,4 +12,17 @@
     </resultMap>
 
 
+<!--    <delete id="deleteBatchRelation">-->
+<!--        delete from `pms_attr_attrgroup_relation` where-->
+<!--        <foreach collection="aarList" item="aar" separator=" or ">-->
+<!--            (attr_id = #{aar.attrId} and attr_group_id = #{aar.attrGroupId}),-->
+<!--        </foreach>-->
+<!--    </delete>-->
+    <delete id="deleteBatchRelation">
+        delete from `pms_attr_attrgroup_relation` where
+        <foreach collection="aarList" item="item" separator=" or ">
+            ( attr_id = #{item.attrId}  and  attr_group_id = #{item.attrGroupId})
+        </foreach>
+    </delete>
+
 </mapper>

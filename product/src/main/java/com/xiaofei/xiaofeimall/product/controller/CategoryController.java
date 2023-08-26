@@ -1,6 +1,7 @@
 package com.xiaofei.xiaofeimall.product.controller;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 
@@ -32,14 +33,13 @@ public class CategoryController {
     private CategoryService categoryService;
 
     /**
-     * 列表
+     * 查出所有分类且以树形结构展示出来;
      */
-    @RequestMapping("/list")
+    @RequestMapping("/list/tree")
     //@RequiresPermissions("product:category:list")
-    public R list(@RequestParam Map<String, Object> params){
-        PageUtils page = categoryService.queryPage(params);
-
-        return R.ok().put("page", page);
+    public R list(){
+        List<CategoryEntity> category = categoryService.listWithTree();
+        return R.ok().put("data", category);
     }
 
 
@@ -51,7 +51,7 @@ public class CategoryController {
     public R info(@PathVariable("catId") Long catId){
 		CategoryEntity category = categoryService.getById(catId);
 
-        return R.ok().put("category", category);
+        return R.ok().put("data", category);
     }
 
     /**
@@ -66,12 +66,18 @@ public class CategoryController {
     }
 
     /**
-     * 修改
+     * 级联更新
      */
     @RequestMapping("/update")
     //@RequiresPermissions("product:category:update")
     public R update(@RequestBody CategoryEntity category){
-		categoryService.updateById(category);
+		categoryService.updateCasede(category);
+        return R.ok();
+    }
+    @RequestMapping("/update/sort")
+    //@RequiresPermissions("product:category:update")
+    public R updateSort(@RequestBody CategoryEntity[] category){
+        categoryService.updateBatchById(Arrays.asList(category));
 
         return R.ok();
     }
@@ -82,7 +88,7 @@ public class CategoryController {
     @RequestMapping("/delete")
     //@RequiresPermissions("product:category:delete")
     public R delete(@RequestBody Long[] catIds){
-		categoryService.removeByIds(Arrays.asList(catIds));
+		categoryService.removeMenuByIds(Arrays.asList(catIds));
 
         return R.ok();
     }

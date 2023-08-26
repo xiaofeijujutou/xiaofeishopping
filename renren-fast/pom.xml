@@ -50,6 +50,14 @@
 	</properties>
 
 	<dependencies>
+
+<!--		spring的nacos注册发现-->
+		<dependency>
+			<groupId>com.alibaba.cloud</groupId>
+			<artifactId>spring-cloud-alibaba-nacos-discovery</artifactId>
+			<version>2.1.0.RELEASE</version>
+		</dependency>
+
 		<dependency>
 			<groupId>com.xiaofei</groupId>
 			<artifactId>xiaofeimall</artifactId>

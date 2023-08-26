@@ -1,0 +1,21 @@
+spring:
+    application:
+        name: xiaofei-thirdpart
+    cloud:
+        nacos:
+            discovery:
+                server-addr: 127.0.0.1:8848
+        alicloud:
+            access-key: LTAI5t7z6mkfF5UFuPMcF9EZ
+            secret-key: YamClltNMdX0cknBwfoEFba2RNLJu1
+            oss:
+                endpoint: oss-cn-guangzhou.aliyuncs.com
+                bucket: xiaofeitoushopping
+
+
+
+
+
+server:
+    port: 30000
+

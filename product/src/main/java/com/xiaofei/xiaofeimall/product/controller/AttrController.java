@@ -1,15 +1,14 @@
 package com.xiaofei.xiaofeimall.product.controller;
 
+import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.Map;
 
 
+import com.xiaofei.xiaofeimall.product.vo.AttrResponseVo;
+import com.xiaofei.xiaofeimall.product.vo.AttrVo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.xiaofei.xiaofeimall.product.entity.AttrEntity;
 import com.xiaofei.xiaofeimall.product.service.AttrService;
@@ -20,6 +19,7 @@ import com.xiaofei.common.utils.R;
 
 /**
  * 商品属性
+ * 管理商品参数
  *
  * @author xiaofei
  * @email xiaofei@gmail.com
@@ -38,7 +38,6 @@ public class AttrController {
     //@RequiresPermissions("product:attr:list")
     public R list(@RequestParam Map<String, Object> params){
         PageUtils page = attrService.queryPage(params);
-
         return R.ok().put("page", page);
     }
 
@@ -49,18 +48,21 @@ public class AttrController {
     @RequestMapping("/info/{attrId}")
     //@RequiresPermissions("product:attr:info")
     public R info(@PathVariable("attrId") Long attrId){
-		AttrEntity attr = attrService.getById(attrId);
+		AttrResponseVo attrVo = attrService.getAttrInfo(attrId);
 
-        return R.ok().put("attr", attr);
+        return R.ok().put("attr", attrVo);
     }
 
     /**
-     * 保存
+     * 基本保存 -> 升级保存
      */
     @RequestMapping("/save")
     //@RequiresPermissions("product:attr:save")
-    public R save(@RequestBody AttrEntity attr){
-		attrService.save(attr);
+    public R save(@RequestBody AttrVo attr){
+        if (attr.getCatelogId() == 0){
+            return R.error("请选择三级菜单分类属性");
+        }
+		attrService.saveAttr(attr);
 
         return R.ok();
     }
@@ -70,7 +72,7 @@ public class AttrController {
      */
     @RequestMapping("/update")
     //@RequiresPermissions("product:attr:update")
-    public R update(@RequestBody AttrEntity attr){
+    public R update(@RequestBody AttrVo attr){
 		attrService.updateById(attr);
 
         return R.ok();
@@ -87,4 +89,21 @@ public class AttrController {
         return R.ok();
     }
 
+
+    /**
+     * 分页查询
+     * @param params 分页查询参数, 到时候直接丢Utils里
+     * @param categoryId
+     * @return
+     * "/base/list/{categoryId}"全部查询
+     * "/sale/list/{categoryId}"销售属性
+     */
+    @GetMapping("/{attrType}/list/{categoryId}")
+    //@RequiresPermissions("product:attr:list")
+    public R paginationList(@RequestParam Map<String, Object> params,
+                            @PathVariable("categoryId") Long categoryId,
+                            @PathVariable("attrType") String attrType){
+        PageUtils page = attrService.queryPage(params, categoryId, attrType);
+        return R.ok().put("page", page);
+    }
 }

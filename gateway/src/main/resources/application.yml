@@ -4,6 +4,43 @@ spring:
     nacos:
       discovery:
         server-addr: 127.0.0.1:8848
+    gateway:
+      routes:
+
+        - id: menber_routes
+          uri: lb://xiaofei-menber
+          predicates:
+            - Path=/api/member/**
+          filters:
+            - RewritePath=/api/(?<segment>.*),/$\{segment}
+
+
+        - id: third_routes
+          uri: lb://xiaofei-thirdpart
+          predicates:
+            - Path=/api/thirdpart/**
+          filters:
+            - RewritePath=/api/thirdpart/(?<segment>.*),/$\{segment}
+
+        - id: product_routes
+          #  携带/api/product/的请求都经过xiaofei-product
+          #这是nacos的,所以是nacos服务,这里就确定了端口
+          uri: lb://xiaofei-product
+          predicates:
+            - Path=/api/product/**
+          #这里就确定端口后面的URL
+          filters:
+            #这里的重写  XXXXX(?<segment>.*) 括号前面的全部不要, $\{segment}是动态拼接的
+            - RewritePath=/api/(?<segment>.*),/$\{segment}
+
+        - id: admin_routes
+          #      lb就是负载均衡, 所有请求都经过renrenfast
+          uri: lb://renren-fast
+          predicates:
+            - Path=/api/**
+          filters:
+            - RewritePath=/api/(?<segment>.*),/renren-fast/$\{segment}
+
 #网关的配置端口是86, 所以所有请求都发给86然后由网关来分发;
 server:
   port: 86

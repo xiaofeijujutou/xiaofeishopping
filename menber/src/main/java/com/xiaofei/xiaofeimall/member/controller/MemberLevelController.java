@@ -5,11 +5,7 @@ import java.util.Map;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.xiaofei.xiaofeimall.member.entity.MemberLevelEntity;
 import com.xiaofei.xiaofeimall.member.service.MemberLevelService;
@@ -34,11 +30,10 @@ public class MemberLevelController {
     /**
      * 列表
      */
-    @RequestMapping("/list")
+    @GetMapping("/list")
     //@RequiresPermissions("member:memberlevel:list")
     public R list(@RequestParam Map<String, Object> params){
         PageUtils page = memberLevelService.queryPage(params);
-
         return R.ok().put("page", page);
     }
 

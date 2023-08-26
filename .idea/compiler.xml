@@ -12,6 +12,7 @@
         <module name="menber" />
         <module name="order" />
         <module name="xiaofeimallcomment" />
+        <module name="thirdpart" />
         <module name="renren-fast" />
         <module name="ware" />
         <module name="coupon" />
@@ -26,6 +27,7 @@
       <module name="product" target="1.8" />
       <module name="renren-fast" target="1.8" />
       <module name="renren-generator" target="1.8" />
+      <module name="thirdpart" target="1.8" />
       <module name="ware" target="1.8" />
       <module name="xiaofeimallcomment" target="8" />
       <module name="xiaofeitoutoushopping" target="1.5" />
@@ -40,6 +42,7 @@
       <module name="product" options="-parameters" />
       <module name="renren-fast" options="-parameters" />
       <module name="renren-generator" options="-parameters" />
+      <module name="thirdpart" options="-parameters" />
       <module name="ware" options="-parameters" />
     </option>
   </component>

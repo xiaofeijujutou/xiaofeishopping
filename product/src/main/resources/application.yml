@@ -1,8 +1,14 @@
 spring:
   cloud:
+#    alicloud:
+#      access-key: LTAI5t7z6mkfF5UFuPMcF9EZ
+#      secret-key: YamClltNMdX0cknBwfoEFba2RNLJu1
+#      oss:
+#        endpoint: oss-cn-guangzhou.aliyuncs.com
     nacos:
       discovery:
         server-addr: 127.0.0.1:8848
+
   application:
     name: xiaofei-product
   datasource:
@@ -11,10 +17,14 @@ spring:
     driverClassName: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://192.168.72.129:3306/gulimall_pms?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai
 mybatis-plus:
+
   mapper-locations: classpath:/mapper/**/*.xml
   global-config:
     db-config:
       id-type: auto
+      logic-delete-value: 1
+      logic-not-delete-value: 0
 
 server:
   port: 10001
+
