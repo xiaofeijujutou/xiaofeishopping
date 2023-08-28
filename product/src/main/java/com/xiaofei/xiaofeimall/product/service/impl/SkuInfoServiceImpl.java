@@ -1,5 +1,7 @@
 package com.xiaofei.xiaofeimall.product.service.impl;
 
+import com.alibaba.nacos.client.utils.StringUtils;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import org.springframework.stereotype.Service;
 import java.util.Map;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -29,6 +31,47 @@ public class SkuInfoServiceImpl extends ServiceImpl<SkuInfoDao, SkuInfoEntity> i
     @Override
     public void saveSkuInfo(SkuInfoEntity skuInfoEntity) {
         this.baseMapper.insert(skuInfoEntity);
+    }
+
+    @Override
+    public PageUtils queryPageByCondition(Map<String, Object> params) {
+        LambdaQueryWrapper<SkuInfoEntity> wrapper = new LambdaQueryWrapper<>();
+
+
+
+        String key = (String) params.get("key");
+        if (!StringUtils.isEmpty(key)) {
+            wrapper.and((w) -> {
+                w.eq(SkuInfoEntity::getSkuId, key).or().like(SkuInfoEntity::getSkuName, key);
+            });
+        }
+        String brandId = (String) params. get("brandId");
+        if (!StringUtils.isEmpty(brandId) && !"0".equals(brandId)) {
+            wrapper.eq(SkuInfoEntity::getBrandId,brandId);
+        }
+        String catelogId = (String) params.get("catelogId");
+        if (!StringUtils.isEmpty(catelogId) && !"0".equals(catelogId)) {
+            wrapper.eq(SkuInfoEntity::getCatalogId,catelogId);
+        }
+        String min = (String) params.get("min");
+        if (!StringUtils.isEmpty(min)) {
+            wrapper.ge(SkuInfoEntity::getPrice, min);
+        }
+        String max = (String) params.get("max");
+        if (!StringUtils.isEmpty(max) && Integer.parseInt(max) != 0) {
+            wrapper.le(SkuInfoEntity::getPrice, max);
+        }
+
+
+
+
+
+        IPage<SkuInfoEntity> page = this.page(
+                new Query<SkuInfoEntity>().getPage(params),
+                wrapper
+        );
+
+        return new PageUtils(page);
     }
 
 }

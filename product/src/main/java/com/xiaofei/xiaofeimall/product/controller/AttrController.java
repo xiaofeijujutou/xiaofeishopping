@@ -2,9 +2,12 @@ package com.xiaofei.xiaofeimall.product.controller;
 
 import java.nio.file.Path;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 
+import com.xiaofei.xiaofeimall.product.entity.ProductAttrValueEntity;
+import com.xiaofei.xiaofeimall.product.service.ProductAttrValueService;
 import com.xiaofei.xiaofeimall.product.vo.AttrResponseVo;
 import com.xiaofei.xiaofeimall.product.vo.AttrVo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,10 +33,17 @@ import com.xiaofei.common.utils.R;
 public class AttrController {
     @Autowired
     private AttrService attrService;
+    @Autowired
+    private ProductAttrValueService productAttrValueService;
 
-    /**
-     * 列表
-     */
+    @GetMapping("/base/listforspu/{spuId}")
+    public R baseAttrlistforspu(@PathVariable("spuId") Long spuId){
+        List<ProductAttrValueEntity> entities = productAttrValueService.baseAttrlistforspu(spuId);
+        return R.ok().put("data",entities);
+    }
+        /**
+         * 列表
+         */
     @RequestMapping("/list")
     //@RequiresPermissions("product:attr:list")
     public R list(@RequestParam Map<String, Object> params){
@@ -71,10 +81,17 @@ public class AttrController {
      * 修改
      */
     @RequestMapping("/update")
-    //@RequiresPermissions("product:attr:update")
     public R update(@RequestBody AttrVo attr){
 		attrService.updateById(attr);
-
+        return R.ok();
+    }
+    /**
+     * 修改Spu
+     */
+    @PostMapping("/update/{spuId}")
+    public R updateSpuAttr(@PathVariable("spuId") Long spuId,
+                           @RequestBody List<ProductAttrValueEntity> entities) {
+        productAttrValueService.updateSpuAttr(spuId, entities);
         return R.ok();
     }
 

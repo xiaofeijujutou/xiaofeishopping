@@ -16,6 +16,8 @@ spring:
     password: root
     driverClassName: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://192.168.72.129:3306/gulimall_pms?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
 mybatis-plus:
 
   mapper-locations: classpath:/mapper/**/*.xml
@@ -27,4 +29,3 @@ mybatis-plus:
 
 server:
   port: 10001
-
