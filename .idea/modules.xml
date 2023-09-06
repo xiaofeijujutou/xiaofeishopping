@@ -9,6 +9,7 @@
       <module fileurl="file://$PROJECT_DIR$/product/product.iml" filepath="$PROJECT_DIR$/product/product.iml" />
       <module fileurl="file://$PROJECT_DIR$/renren-fast/renren-fast.iml" filepath="$PROJECT_DIR$/renren-fast/renren-fast.iml" />
       <module fileurl="file://$PROJECT_DIR$/renren-generator-master/renren-generator.iml" filepath="$PROJECT_DIR$/renren-generator-master/renren-generator.iml" />
+      <module fileurl="file://$PROJECT_DIR$/search/search.iml" filepath="$PROJECT_DIR$/search/search.iml" />
       <module fileurl="file://$PROJECT_DIR$/thirdpart/thirdpart.iml" filepath="$PROJECT_DIR$/thirdpart/thirdpart.iml" />
       <module fileurl="file://$PROJECT_DIR$/ware/ware.iml" filepath="$PROJECT_DIR$/ware/ware.iml" />
       <module fileurl="file://$PROJECT_DIR$/xiaofeimall-comment/xiaofeimallcomment.iml" filepath="$PROJECT_DIR$/xiaofeimall-comment/xiaofeimallcomment.iml" />

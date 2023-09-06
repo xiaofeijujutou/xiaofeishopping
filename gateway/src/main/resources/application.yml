@@ -47,6 +47,11 @@ spring:
           filters:
             - RewritePath=/api/(?<segment>.*),/renren-fast/$\{segment}
 
-#网关的配置端口是86, 所以所有请求都发给86然后由网关来分发;
+        - id: xiaofeimall_host_routes
+          uri: lb://xiaofei-product
+          predicates:
+            - Host=**.xiaofeimall.com,xiaofeimall.com
+
+
 server:
   port: 86

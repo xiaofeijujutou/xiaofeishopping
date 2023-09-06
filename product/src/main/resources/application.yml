@@ -1,14 +1,17 @@
 spring:
   cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848
 #    alicloud:
 #      access-key: LTAI5t7z6mkfF5UFuPMcF9EZ
 #      secret-key: YamClltNMdX0cknBwfoEFba2RNLJu1
 #      oss:
 #        endpoint: oss-cn-guangzhou.aliyuncs.com
-    nacos:
-      discovery:
-        server-addr: 127.0.0.1:8848
 
+  redis:
+    host: 192.168.72.129
+    port: 6379
   application:
     name: xiaofei-product
   datasource:
@@ -18,6 +21,8 @@ spring:
     url: jdbc:mysql://192.168.72.129:3306/gulimall_pms?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
+  thymeleaf:
+    cache: true
 mybatis-plus:
 
   mapper-locations: classpath:/mapper/**/*.xml
@@ -29,3 +34,6 @@ mybatis-plus:
 
 server:
   port: 10001
+logging:
+  level:
+    com.xiaofei.xiaofeimall: error

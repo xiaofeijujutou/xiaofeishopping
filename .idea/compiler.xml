@@ -8,11 +8,12 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="gateway" />
+        <module name="search" />
         <module name="product" />
         <module name="menber" />
-        <module name="order" />
-        <module name="xiaofeimallcomment" />
         <module name="thirdpart" />
+        <module name="xiaofeimallcomment" />
+        <module name="order" />
         <module name="renren-fast" />
         <module name="ware" />
         <module name="coupon" />
@@ -27,6 +28,7 @@
       <module name="product" target="1.8" />
       <module name="renren-fast" target="1.8" />
       <module name="renren-generator" target="1.8" />
+      <module name="search" target="1.8" />
       <module name="thirdpart" target="1.8" />
       <module name="ware" target="1.8" />
       <module name="xiaofeimallcomment" target="8" />
@@ -42,6 +44,7 @@
       <module name="product" options="-parameters" />
       <module name="renren-fast" options="-parameters" />
       <module name="renren-generator" options="-parameters" />
+      <module name="search" options="-parameters" />
       <module name="thirdpart" options="-parameters" />
       <module name="ware" options="-parameters" />
     </option>

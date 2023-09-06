@@ -5,6 +5,7 @@ import com.xiaofei.common.utils.PageUtils;
 import com.xiaofei.xiaofeimall.product.entity.SkuImagesEntity;
 import com.xiaofei.xiaofeimall.product.entity.SkuInfoEntity;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -21,5 +22,7 @@ public interface SkuInfoService extends IService<SkuInfoEntity> {
     void saveSkuInfo(SkuInfoEntity skuInfoEntity);
 
     PageUtils queryPageByCondition(Map<String, Object> params);
+
+    List<SkuInfoEntity> getSkusBuyId(Long spuId);
 }
 

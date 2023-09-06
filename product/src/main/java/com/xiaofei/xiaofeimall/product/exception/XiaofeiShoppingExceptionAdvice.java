@@ -15,7 +15,7 @@ import java.util.Map;
 
 //@ResponseBody
 //@ControllerAdvice
-@RestControllerAdvice(basePackages = "com.xiaofei.xiaofeimall.product.controller")
+@RestControllerAdvice(basePackages = "com.xiaofei.xiaofeimall.product.app")
 public class XiaofeiShoppingExceptionAdvice {
 
     @ExceptionHandler(value = {MethodArgumentNotValidException.class, })

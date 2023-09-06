@@ -3,11 +3,13 @@ package com.xiaofei.xiaofeimall.ware.service.impl;
 import com.alibaba.nacos.client.utils.StringUtils;
 import com.xiaofei.common.utils.R;
 import com.xiaofei.xiaofeimall.ware.feign.ProductFeignService;
+import com.xiaofei.xiaofeimall.ware.vo.SkuHasStockVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -78,6 +80,25 @@ public class WareSkuServiceImpl extends ServiceImpl<WareSkuDao, WareSkuEntity> i
             wareSkuDao.addStock(skuId,wareId,skuNum);
         }
 
+    }
+
+    /**
+     * 查询是否有库存
+     * @param skuIds
+     * @return
+     */
+    @Override
+    public List<SkuHasStockVo> getSkusHasStock(List<Long> skuIds) {
+        List<SkuHasStockVo> collect = skuIds.stream().map(skuId -> {
+            SkuHasStockVo skuHasStockVo = new SkuHasStockVo();
+            //查询当前总库存量
+            Long count = baseMapper.getSkuStock(skuId);
+            skuHasStockVo.setSkuId(skuId);
+            //count==null?false:count>0 = count==null?false:&&count>0
+            skuHasStockVo.setHasStock(count == null ? false : count > 0);
+            return skuHasStockVo;
+        }).collect(Collectors.toList());
+        return collect;
     }
 
 }

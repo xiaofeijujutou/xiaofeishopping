@@ -29,5 +29,7 @@ public interface AttrService extends IService<AttrEntity> {
     void updateById(AttrVo attr);
 
     List<AttrEntity> getRelationAttr(Long attrgroupId);
+
+    List<Long> selectSearchAttrIds(List<Long> attrIds);
 }
 
