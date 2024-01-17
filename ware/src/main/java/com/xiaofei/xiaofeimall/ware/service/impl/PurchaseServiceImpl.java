@@ -128,47 +128,45 @@ public class PurchaseServiceImpl extends ServiceImpl<PurchaseDao, PurchaseEntity
         });
     }
 
-
+    /**
+     * 采购人员采购完商品之后调用这个方法
+     * 成功就加库存,没成功就记录一下
+     * @param doneVo
+     */
     @Transactional
     @Override
     public void done(PurchaseDoneVo doneVo) {
-
+        //1,采购单id
         Long id = doneVo.getId();
-
-
         //2、改变采购项的状态
-        Boolean flag = true;
-        List<PurchaseItemDoneVo> items = doneVo.getItems();
-
-        List<PurchaseDetailEntity> updates = new ArrayList<>();
-        for (PurchaseItemDoneVo item : items) {
+        boolean flag = true;
+        List<PurchaseItemDoneVo> unprocessedPurchaseOrder = doneVo.getItems();
+        List<PurchaseDetailEntity> purchaseEntities = new ArrayList<>();
+        for (PurchaseItemDoneVo unprocessedItem : unprocessedPurchaseOrder) {
             PurchaseDetailEntity detailEntity = new PurchaseDetailEntity();
-            if(item.getStatus() == WareConstant.PurchaseDetailStatusEnum.HASERROR.getCode()){
+            //如果采购发生异常,就记录一下(这里状态码只有成功失败)
+            if(unprocessedItem.getStatus() == WareConstant.PurchaseDetailStatusEnum.HASERROR.getCode()){
                 flag = false;
-                detailEntity.setStatus(item.getStatus());
-            }else{
-                detailEntity.setStatus(WareConstant.PurchaseDetailStatusEnum.FINISH.getCode());
-                ////3、将成功采购的进行入库
-                PurchaseDetailEntity entity = purchaseDetailService.getById(item.getItemId());
-                wareSkuService.addStock(entity.getSkuId(),entity.getWareId(),entity.getSkuNum());
-
+                detailEntity.setStatus(unprocessedItem.getStatus());
             }
-            detailEntity.setId(item.getItemId());
-            updates.add(detailEntity);
+            //如果采购没有异常,则把对应商品的库存增加
+            else{
+                detailEntity.setStatus(WareConstant.PurchaseDetailStatusEnum.FINISH.getCode());
+                PurchaseDetailEntity entity = purchaseDetailService.getById(unprocessedItem.getItemId());
+                wareSkuService.addStock(entity.getSkuId(),entity.getWareId(),entity.getSkuNum());
+            }
+            detailEntity.setId(unprocessedItem.getItemId());
+            purchaseEntities.add(detailEntity);
         }
-
-        purchaseDetailService.updateBatchById(updates);
-
-        //1、改变采购单状态
+        purchaseDetailService.updateBatchById(purchaseEntities);
+        //1、改变采购单状态,一个采购单可能有多个商品,只要有一个商品出问题了,这里就会设置成HASERROR
         PurchaseEntity purchaseEntity = new PurchaseEntity();
         purchaseEntity.setId(id);
-        purchaseEntity.setStatus(flag?WareConstant.PurchaseStatusEnum.FINISH.getCode():WareConstant.PurchaseStatusEnum.HASERROR.getCode());
+        purchaseEntity.setStatus(flag ?
+                WareConstant.PurchaseStatusEnum.FINISH.getCode() :
+                WareConstant.PurchaseStatusEnum.HASERROR.getCode());
         purchaseEntity.setUpdateTime(new Date());
         this.updateById(purchaseEntity);
-
-
-
-
     }
 
 }

@@ -9,6 +9,8 @@ import net.sf.jsqlparser.statement.select.KSQLJoinWindow;
 import net.sf.jsqlparser.statement.select.KSQLWindow;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
@@ -144,6 +146,7 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryDao, CategoryEntity
      */
     @Override
     @Transactional
+    @CacheEvict(value = "category", key = "'getCatelogJson'")
     public void updateCasede(CategoryEntity category) {
         this.updateById(category);
         if (!Strings.isEmpty(category.getName())) {
@@ -170,6 +173,7 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryDao, CategoryEntity
      */
 
     @Override
+    @Cacheable(value = "category", key = "#root.method.name")
     public Map<String, List<Catelog2Vo>> getCatelogJson() {
         String catalogJSON = stringRedisTemplate.opsForValue().get("catalogJSON");
         if (StringUtils.isEmpty(catalogJSON)) {

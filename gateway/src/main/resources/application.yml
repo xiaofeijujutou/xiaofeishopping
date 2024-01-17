@@ -1,4 +1,3 @@
-
 spring:
   cloud:
     nacos:
@@ -28,29 +27,40 @@ spring:
           filters:
             - RewritePath=/api/thirdpart/(?<segment>.*),/$\{segment}
 
+          #id就是这个路由叫什么名字,后续接入Sentinel可以实现限流
+          #最后实现的效果就是:携带/api/product/的请求都经过xiaofei-product
         - id: product_routes
-          #  携带/api/product/的请求都经过xiaofei-product
-          #这是nacos的,所以是nacos服务,这里就确定了端口
+          # xiaofei-product是nacos的服务名称,将请求转发给nacos来找xiaofei-product这个服务的端口
+          # lb就是启动负载均衡
           uri: lb://xiaofei-product
+          # 断言predicates,Path是用户发过来的请求,转发给nacos服务,也就是上面的uri;
+          # -Path就是匹配路径,相当于从url里面/user/login来匹配
+          # -Host就是url头匹配,相当于域名匹配
           predicates:
             - Path=/api/product/**
-          #这里就确定端口后面的URL
+          # filters是过滤器,有- 多种操作, -RewritePath是重写url,去掉api前面的东西,只保留后面的东西
           filters:
             #这里的重写  XXXXX(?<segment>.*) 括号前面的全部不要, $\{segment}是动态拼接的
             - RewritePath=/api/(?<segment>.*),/$\{segment}
 
         - id: admin_routes
-          #      lb就是负载均衡, 所有请求都经过renrenfast
           uri: lb://renren-fast
           predicates:
             - Path=/api/**
           filters:
             - RewritePath=/api/(?<segment>.*),/renren-fast/$\{segment}
 
+        - id: xiaofeimall_search_routes
+          uri: lb://xiaofei-search
+          predicates:
+            - Host= search.xiaofeimall.com
+          # 上面是后台管理系统的网关,这里是用户的请求网关
         - id: xiaofeimall_host_routes
           uri: lb://xiaofei-product
+          # 这里的路径匹配匹配的就是请求头,按照域名匹配,带**就是任意子域名的匹配
           predicates:
-            - Host=**.xiaofeimall.com,xiaofeimall.com
+            - Host= xiaofeimall.com
+
 
 
 server:
