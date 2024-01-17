@@ -12,7 +12,7 @@ import org.apache.ibatis.annotations.Param;
  * @email xiaofei@gmail.com
  * @date 2023-08-17 19:52:39
  */
-@Mapper
+@Mapper()
 public interface WareSkuDao extends BaseMapper<WareSkuEntity> {
 
     void addStock(@Param("skuId") Long skuId, @Param("wareId") Long wareId, @Param("skuNum") Integer skuNum);

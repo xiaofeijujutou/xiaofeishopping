@@ -18,8 +18,9 @@ public class ElasticsearchConfig {
 //                        .HeapBufferedResponseConsumerFactory(30 * 1024 * 1024 * 1024));
         COMMON_OPTIONS = builder.build();
     }
+
     @Bean
-    public RestHighLevelClient esRestClient(){
+    public RestHighLevelClient restHighLevelClient(){
         RestHighLevelClient client = new RestHighLevelClient(
                 RestClient.builder(
                         new HttpHost("192.168.72.129", 9200, "http"),

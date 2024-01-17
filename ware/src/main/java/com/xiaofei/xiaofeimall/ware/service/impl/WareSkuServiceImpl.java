@@ -50,10 +50,18 @@ public class WareSkuServiceImpl extends ServiceImpl<WareSkuDao, WareSkuEntity> i
         return new PageUtils(page);
     }
 
+    /**
+     * 增加商品库存的方法
+     * @param skuId
+     * @param wareId
+     * @param skuNum
+     */
     @Override
     public void addStock(Long skuId, Long wareId, Integer skuNum) {
         //1、判断如果还没有这个库存记录新增
-        List<WareSkuEntity> entities = wareSkuDao.selectList(new QueryWrapper<WareSkuEntity>().eq("sku_id", skuId).eq("ware_id", wareId));
+        List<WareSkuEntity> entities = wareSkuDao.selectList(new QueryWrapper<WareSkuEntity>()
+                .eq("sku_id", skuId)
+                .eq("ware_id", wareId));
         if(entities == null || entities.size() == 0){
             WareSkuEntity skuEntity = new WareSkuEntity();
             skuEntity.setSkuId(skuId);
@@ -64,17 +72,15 @@ public class WareSkuServiceImpl extends ServiceImpl<WareSkuDao, WareSkuEntity> i
             //1、自己catch异常
             //TODO 还可以用什么办法让异常出现以后不回滚？高级
             try {
-                R info = productFeignService.info(skuId);
-                Map<String,Object> data = (Map<String, Object>) info.get("skuInfo");
-
-                if(info.getCode() == 0){
+                //远程调用
+                R rpcResultInfo = productFeignService.info(skuId);
+                Map<String,Object> data = (Map<String, Object>) rpcResultInfo.get("skuInfo");
+                if(rpcResultInfo.getCode() == 0){
                     skuEntity.setSkuName((String) data.get("skuName"));
                 }
             }catch (Exception e){
-
+                e.printStackTrace();
             }
-
-
             wareSkuDao.insert(skuEntity);
         }else{
             wareSkuDao.addStock(skuId,wareId,skuNum);
