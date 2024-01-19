@@ -30,8 +30,11 @@ public class SearchResult {
      */
     @Data
     public static class NavVo{
+        //请求参数的key
         private String navName;
+        //请求参数的value
         private String navValue;
+        //跳转连接
         private String link;
     }
     /**

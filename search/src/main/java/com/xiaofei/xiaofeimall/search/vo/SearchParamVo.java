@@ -6,6 +6,7 @@ import java.util.List;
 
 /**
  * 封装页面所有可能传递的页面
+ *
  */
 @Data
 public class SearchParamVo {
@@ -29,8 +30,9 @@ public class SearchParamVo {
 
     /**
      *仅显示有货:hasStock=0/1
+     *
      */
-    private Integer hasStock = 1;
+    private Integer hasStock;
     /**
      *价格区间:skuPrice=1_500/_500/500_
      */
@@ -44,10 +46,15 @@ public class SearchParamVo {
     private List<Long> brandId;
     /**
      * attr扁平化处理了,用_来拼接
+     * 前段发过来的参数:attrs=1_A13,前面是id,后面是value
      */
     private List<String> attrs;
-    //分页
+    /**
+     * 分页
+     */
     private Integer pageNum = 1;
-
-    private String _queryString;//原生查询条件
+    /**
+     * 原生查询条件
+     */
+    private String _queryString;
 }
