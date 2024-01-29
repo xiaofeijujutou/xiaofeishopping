@@ -4,10 +4,10 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.xiaofei.xiaofeimall.product.dao.AttrAttrgroupRelationDao;
 import com.xiaofei.xiaofeimall.product.entity.AttrAttrgroupRelationEntity;
 import com.xiaofei.xiaofeimall.product.entity.AttrEntity;
-import com.xiaofei.xiaofeimall.product.service.AttrAttrgroupRelationService;
 import com.xiaofei.xiaofeimall.product.service.AttrService;
 import com.xiaofei.xiaofeimall.product.vo.AttrGroupRelationVo;
 import com.xiaofei.xiaofeimall.product.vo.AttrGroupWithAttrsVo;
+import com.xiaofei.xiaofeimall.product.vo.SpuItemAttrGroupVo;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +35,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class AttrGroupServiceImpl extends ServiceImpl<AttrGroupDao, AttrGroupEntity> implements AttrGroupService {
 
     @Autowired
-    AttrAttrgroupRelationDao relationDao;
+    AttrAttrgroupRelationDao attrAttrgroupRelationDao;
     @Autowired
     AttrService attrService;
     @Override
@@ -96,7 +96,7 @@ public class AttrGroupServiceImpl extends ServiceImpl<AttrGroupDao, AttrGroupEnt
             AAR.setAttrGroupId(vo.getAttrGroupId());
             return AAR;
         }).collect(Collectors.toList());
-        relationDao.deleteBatchRelation(AARList);
+        attrAttrgroupRelationDao.deleteBatchRelation(AARList);
 
     }
 
@@ -119,7 +119,7 @@ public class AttrGroupServiceImpl extends ServiceImpl<AttrGroupDao, AttrGroupEnt
             //根据attrId去表里面查,如果为空,就是没有被关联过的;
             LambdaQueryWrapper<AttrAttrgroupRelationEntity> wrapper =
                     new LambdaQueryWrapper<AttrAttrgroupRelationEntity>().eq(AttrAttrgroupRelationEntity::getAttrId, attr.getAttrId());
-            AttrAttrgroupRelationEntity AARentity = relationDao.selectOne(wrapper);
+            AttrAttrgroupRelationEntity AARentity = attrAttrgroupRelationDao.selectOne(wrapper);
             if(AARentity == null){
                 return attr.getAttrId();
             }
@@ -170,5 +170,19 @@ public class AttrGroupServiceImpl extends ServiceImpl<AttrGroupDao, AttrGroupEnt
         return collect;
 
     }
+
+    /**
+     * 根据spuId查对应的Attrs,也就是下面那一串,还有skuId来查的,就是销售attr;
+     * 查询出来应该是List<Map<K,List<Map<K,V>>>> ==> List<Map<主体,List<Map<键,值>>>>
+     * @param spuId spuId
+     * @param catalogId 三级分类id
+     * @return List<Map<主体,List<Map<键,值>>>>
+     */
+    @Override
+    public List<SpuItemAttrGroupVo> getAttrGroupWithAttrsBySpuId(Long spuId, Long catalogId) {
+        AttrGroupDao attrGroupDao = this.getBaseMapper();
+        return attrGroupDao.getAttrGroupWithAttrsBySpuId(spuId, catalogId);
+    }
+
 
 }

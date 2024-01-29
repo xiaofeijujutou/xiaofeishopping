@@ -15,7 +15,7 @@ import com.xiaofei.common.utils.R;
 
 
 /**
- * spu信息
+ * spu信息,spu是一个商品里面的具体信息
  *
  * @author xiaofei
  * @email xiaofei@gmail.com

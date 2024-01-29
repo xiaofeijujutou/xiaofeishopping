@@ -3,7 +3,7 @@
 
 <mapper namespace="com.xiaofei.xiaofeimall.product.dao.AttrGroupDao">
 
-	<!-- 可根据自己的需求，是否要使用 -->
+	<!-- 可根据自己的需求，是否要使用, Mybatis自带的实体类字段映射-->
     <resultMap type="com.xiaofei.xiaofeimall.product.entity.AttrGroupEntity" id="attrGroupMap">
         <result property="attrGroupId" column="attr_group_id"/>
         <result property="attrGroupName" column="attr_group_name"/>
@@ -12,6 +12,38 @@
         <result property="icon" column="icon"/>
         <result property="catelogId" column="catelog_id"/>
     </resultMap>
+
+    <!--自定义属性映射,内部类不能点出来,但是可以选择有相同属性名的类,也可以自动封装-->
+    <resultMap id="spuItemAttrGroupVoResult" type="com.xiaofei.xiaofeimall.product.vo.SpuItemAttrGroupVo">
+        <result property="groupName" column="attr_group_name"></result>
+        <collection property="attrs" ofType="com.xiaofei.xiaofeimall.product.vo.SpuItemAttrGroupVo$SpuBaseAttrVo">
+            <result property="attrName" column="attr_name"></result>
+            <result property="attrValue" column="attr_value"></result>
+        </collection>
+    </resultMap>
+
+    <!--id就是方法名, resultType就是返回值类型,因为这里是嵌套的,不能识别,得自定义参数和属性的映射
+        这个方法的作用是: 根据spuId, catalogId来查出一个spu商品最下面的Attr介绍-->
+    <select id="getAttrGroupWithAttrsBySpuId"
+            resultType="com.xiaofei.xiaofeimall.product.vo.SpuItemAttrGroupVo"
+            resultMap="spuItemAttrGroupVoResult">
+        SELECT
+            pag.attr_group_name,
+            ppav.attr_name,
+            ppav.attr_value
+--             这个VO里面没用到就注释掉;
+--             ppav.spu_id,
+--             pag.attr_group_id,
+--             paar.attr_id
+        FROM
+            pms_attr_group pag
+            LEFT JOIN pms_attr_attrgroup_relation paar ON paar.attr_group_id = paar.attr_group_id
+            LEFT JOIN pms_product_attr_value ppav ON paar.attr_id = ppav.attr_id
+        WHERE
+            pag.catelog_id = #{catalogId}
+        AND spu_id = #{spuId}
+        ORDER BY ppav.attr_sort DESC;
+    </select>
 
 
 </mapper>

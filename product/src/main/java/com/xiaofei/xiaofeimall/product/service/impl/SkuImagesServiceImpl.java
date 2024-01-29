@@ -1,6 +1,10 @@
 package com.xiaofei.xiaofeimall.product.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 import java.util.Map;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -24,6 +28,17 @@ public class SkuImagesServiceImpl extends ServiceImpl<SkuImagesDao, SkuImagesEnt
         );
 
         return new PageUtils(page);
+    }
+
+    /**
+     * 根据skuId来查出对应的所有sku的图片，
+     * @param skuId
+     * @return
+     */
+    @Override
+    public List<SkuImagesEntity> getSkuImagesListById(Long skuId) {
+        return this.getBaseMapper().selectList(Wrappers.<SkuImagesEntity>lambdaQuery()
+                .eq(SkuImagesEntity::getSkuId, skuId));
     }
 
 }

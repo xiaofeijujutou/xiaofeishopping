@@ -37,6 +37,7 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -290,7 +291,7 @@ public class MallSearchServiceImpl implements MallSearchService {
         return "http://search.xiaofeimall.com/list.html?" + replace;
     }
 
-    /**
+    /** 
      * 构建商品查询的ES请求
      * 准备检索请求:
      * 模糊匹配，过滤(按照属性，分类，品牌，价格区间，库存),排序，分类，高亮，聚合分析
