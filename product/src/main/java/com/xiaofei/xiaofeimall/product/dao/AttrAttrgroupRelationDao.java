@@ -4,6 +4,8 @@ import com.xiaofei.xiaofeimall.product.entity.AttrAttrgroupRelationEntity;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
@@ -15,6 +17,7 @@ import java.util.List;
  * @date 2023-08-17 16:02:51
  */
 @Mapper
+@Repository
 public interface AttrAttrgroupRelationDao extends BaseMapper<AttrAttrgroupRelationEntity> {
 
     void deleteBatchRelation(@Param("aarList") List<AttrAttrgroupRelationEntity> aarList);

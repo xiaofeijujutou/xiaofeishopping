@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.xiaofei.common.utils.PageUtils;
 import com.xiaofei.xiaofeimall.product.entity.SpuInfoDescEntity;
 import com.xiaofei.xiaofeimall.product.entity.SpuInfoEntity;
+import com.xiaofei.xiaofeimall.product.vo.SkuItemVo;
 import com.xiaofei.xiaofeimall.product.vo.SpuSaveVo;
 
 import java.util.Map;
@@ -26,5 +27,7 @@ public interface SpuInfoService extends IService<SpuInfoEntity> {
     PageUtils queryPageByCondition(Map<String, Object> params);
 
     void up(Long spuId);
+
+
 }
 

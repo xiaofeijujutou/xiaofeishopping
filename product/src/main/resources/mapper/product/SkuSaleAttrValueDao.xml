@@ -3,7 +3,7 @@
 
 <mapper namespace="com.xiaofei.xiaofeimall.product.dao.SkuSaleAttrValueDao">
 
-	<!-- 可根据自己的需求，是否要使用 -->
+    <!-- 可根据自己的需求，是否要使用 -->
     <resultMap type="com.xiaofei.xiaofeimall.product.entity.SkuSaleAttrValueEntity" id="skuSaleAttrValueMap">
         <result property="id" column="id"/>
         <result property="skuId" column="sku_id"/>
@@ -12,6 +12,31 @@
         <result property="attrValue" column="attr_value"/>
         <result property="attrSort" column="attr_sort"/>
     </resultMap>
+
+    <resultMap id="skuItemSaleAttrVo" type="com.xiaofei.xiaofeimall.product.vo.SkuItemSaleAttrVo">
+        <result column="attr_id" property="attrId"></result>
+        <result column="attr_name" property="attrName"></result>
+        <collection property="attrValues" ofType="com.xiaofei.xiaofeimall.product.vo.AttrValueWithSkuIdVo">
+            <result column="attr_value" property="attrValue"></result>
+            <result column="sku_ids" property="skuIds"></result>
+        </collection>
+    </resultMap>
+    <select id="getSaleAttrValueBySpuId" resultMap="skuItemSaleAttrVo">
+        SELECT
+            sale.attr_id ,
+            sale.attr_name ,
+            attr_value,
+            GROUP_CONCAT(DISTINCT info.`sku_id` ) as sku_ids
+        FROM
+            pms_sku_info info
+            LEFT JOIN pms_sku_sale_attr_value sale ON info.sku_id = sale.sku_id
+        WHERE
+            info.spu_id = #{spuId}
+        GROUP BY
+            sale.attr_id,
+            sale.attr_value,
+	        sale.attr_name;
+    </select>
 
 
 </mapper>

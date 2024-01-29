@@ -1204,13 +1204,13 @@
                             </div>
                             <p class="da">
                                 <!--设计大图显示这里的超链接点进去就是跳转商品-->
-                                <a href="/static/search/#" title="dd">
+                                <a th:href="|http://item.xiaofeimall.com/${product.skuId}.html|" >
                                     <img th:src="${product.getSkuImg() != '' ? product.getSkuImg() : product.getBrandImg()}" class="dim"/>
                                 </a>
                             </p>
                             <ul class="tab_im">
 <!--                                图片效果,显示多个就是不一样的颜色-->
-                                <li><a href="/static/search/#" title="黑色">
+                                <li><a th:href="|http://item.xiaofeimall.com/${product.skuId}.html|" title="黑色">
                                     <img th:src="${product.getSkuImg() != '' ? product.getSkuImg() : product.getBrandImg()}"/></a></li>
                             </ul>
                             <p class="tab_R">
@@ -1219,7 +1219,7 @@
 
                             </p>
                             <p class="tab_JE">
-                                <a href="/static/search/#" th:utext="${product.getSkuTitle()}">
+                                <a th:href="|http://item.xiaofeimall.com/${product.skuId}.html|" th:utext="${product.getSkuTitle()}">
                                     Apple iPhone 7 Plus (A1661) 32G 黑色 移动联通电信4G手机
                                 </a>
                             </p>
