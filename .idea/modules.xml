@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/auth-server/auth-server.iml" filepath="$PROJECT_DIR$/auth-server/auth-server.iml" />
       <module fileurl="file://$PROJECT_DIR$/coupon/coupon.iml" filepath="$PROJECT_DIR$/coupon/coupon.iml" />
       <module fileurl="file://$PROJECT_DIR$/gateway/gateway.iml" filepath="$PROJECT_DIR$/gateway/gateway.iml" />
       <module fileurl="file://$PROJECT_DIR$/menber/menber.iml" filepath="$PROJECT_DIR$/menber/menber.iml" />
@@ -12,7 +13,7 @@
       <module fileurl="file://$PROJECT_DIR$/search/search.iml" filepath="$PROJECT_DIR$/search/search.iml" />
       <module fileurl="file://$PROJECT_DIR$/thirdpart/thirdpart.iml" filepath="$PROJECT_DIR$/thirdpart/thirdpart.iml" />
       <module fileurl="file://$PROJECT_DIR$/ware/ware.iml" filepath="$PROJECT_DIR$/ware/ware.iml" />
-      <module fileurl="file://$PROJECT_DIR$/xiaofeimall-comment/xiaofeimallcomment.iml" filepath="$PROJECT_DIR$/xiaofeimall-comment/xiaofeimallcomment.iml" />
+      <module fileurl="file://$PROJECT_DIR$/common/xiaofeimall-comment.iml" filepath="$PROJECT_DIR$/common/xiaofeimall-comment.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/xiaofeitoutoushopping.iml" filepath="$PROJECT_DIR$/.idea/xiaofeitoutoushopping.iml" />
     </modules>
   </component>

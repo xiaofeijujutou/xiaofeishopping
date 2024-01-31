@@ -8,7 +8,7 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 
 @EnableCaching
-@EnableFeignClients(basePackages =  "com.xiaofei.xiaofeimall.product.feign")
+@EnableFeignClients(basePackages = "com.xiaofei.xiaofeimall.product.feign")
 @EnableDiscoveryClient
 @SpringBootApplication
 @MapperScan("com.xiaofei.xiaofeimall.product.dao")
