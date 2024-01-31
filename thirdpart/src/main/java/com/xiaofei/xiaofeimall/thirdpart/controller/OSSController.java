@@ -1,20 +1,14 @@
 package com.xiaofei.xiaofeimall.thirdpart.controller;
 
-
-import com.alibaba.fastjson.serializer.SimpleDateFormatSerializer;
 import com.aliyun.oss.OSS;
-import com.aliyun.oss.OSSClient;
-import com.aliyun.oss.OSSClientBuilder;
 import com.aliyun.oss.common.utils.BinaryUtil;
 import com.aliyun.oss.model.MatchMode;
 import com.aliyun.oss.model.PolicyConditions;
 import com.xiaofei.common.utils.R;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-
+import javax.annotation.Resource;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.LinkedHashMap;
@@ -22,7 +16,7 @@ import java.util.Map;
 
 @RestController
 public class OSSController {
-    @Autowired
+    @Resource
     private OSS ossClient;
 
     @Value("${spring.cloud.alicloud.oss.endpoint}")

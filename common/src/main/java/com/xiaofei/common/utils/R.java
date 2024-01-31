@@ -10,6 +10,7 @@ package com.xiaofei.common.utils;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
+import com.xiaofei.common.exception.BizCodeEnume;
 import org.apache.http.HttpStatus;
 
 import java.util.HashMap;
@@ -43,7 +44,7 @@ public class R extends HashMap<String, Object> {
 	}
 
 	public R() {
-		put("code", 0);
+		put("code", BizCodeEnume.SUCCESS_CODE.getCode());
 		put("msg", "success");
 	}
 
@@ -85,5 +86,8 @@ public class R extends HashMap<String, Object> {
 
 	public Integer getCode() {
 		return  (Integer) this.get("code");
+	}
+	public String getMsg() {
+		return  (String) this.get("msg");
 	}
 }
