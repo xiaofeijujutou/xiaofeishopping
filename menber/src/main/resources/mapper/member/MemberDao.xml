@@ -24,6 +24,20 @@
         <result property="status" column="status"/>
         <result property="createTime" column="create_time"/>
     </resultMap>
+    <select id="checkUniqueness"
+            parameterType="com.xiaofei.xiaofeimall.member.vo.CheckUniquenessVo"
+            resultType="com.xiaofei.xiaofeimall.member.entity.MemberEntity">
+        SELECT * FROM ums_member
+        <where>
+            <if test="vo.phone != null">
+                mobile = #{vo.phone}
+            </if>
+            <if test="vo.userName != null">
+                OR username = #{vo.userName}
+            </if>
+        </where>
+        LIMIT 1
+    </select>
 
 
 </mapper>

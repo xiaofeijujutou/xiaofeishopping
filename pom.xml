@@ -19,7 +19,7 @@
         <module>product</module>
         <module>renren-fast</module>
         <module>renren-generator-master</module>
-        <module>xiaofeimall-comment</module>
+        <module>common</module>
     </modules>
 
 
