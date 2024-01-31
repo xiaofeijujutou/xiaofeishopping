@@ -95,11 +95,12 @@
   					</b>
         <ul>
           <li>
-            <a href="/static//登录页面\index.html">你好，请登录</a>
+            <a href="http://auth.xiaofeimall.com/login.html">你好，请登录</a>
           </li>
           <li>
-            <a href="/static//注册页面\index.html" class="li_2">免费注册</a>
+            <a href="http://auth.xiaofeimall.com/reg.html" class="li_2">免费注册</a>
           </li>
+
           <span>|</span>
           <li>
             <a href="/static/#">我的订单</a>
@@ -112,7 +113,7 @@
     <!--搜索导航-->
     <div class="header_sous">
       <div class="header_form">
-        <input id="searchText" type="text" placeholder="" />
+        <input id="searchText" type="text" placeholder="" onkeypress="handleKeyPress(event)"/>
         <span style="background: url('/static/index/img/img_12.png') 0 -1px;"></span>
         <!--<button><i class="glyphicon"></i></button>-->
         <a href="javascript:search()"><img src="/static/index/img/img_09.png" /></a>
@@ -609,7 +610,11 @@
       var keyword=$("#searchText").val()
       window.location.href="http://search.xiaofeimall.com/list.html?keyword="+keyword;
   }
-
+  function handleKeyPress(event) {
+    if (event.keyCode === 13) {
+      search();
+    }
+  }
 </script>
 <script type="text/javascript" src="/static/index/js/text.js"></script>
 <script type="text/javascript" src="/static/index/js/header.js"></script>

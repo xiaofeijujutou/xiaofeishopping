@@ -59,8 +59,11 @@ spring:
           uri: lb://xiaofei-product
           # 这里的路径匹配匹配的就是请求头,按照域名匹配,带**就是任意子域名的匹配
           predicates:
-            - Host= xiaofeimall.com
-
+            - Host= xiaofeimall.com,item.xiaofeimall.com
+        - id: xiaofeimall_auth_routes
+          uri: lb://xiaofei-auth-server
+          predicates:
+            - Host= auth.xiaofeimall.com
 
 
 server:
