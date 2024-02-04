@@ -5,11 +5,13 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
+import org.springframework.session.data.redis.config.annotation.web.http.EnableRedisHttpSession;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 //@EnableFeignClients(basePackages = "com.xiaofei.xiaofeimall.ware.feign")
 //@EnableTransactionManagement
 //@MapperScan(basePackages = "com.xiaofei.xiaofeimall.ware.dao")
+@EnableRedisHttpSession
 @EnableDiscoveryClient
 @SpringBootApplication(exclude = {DataSourceAutoConfiguration.class})
 public class SearchApplication {

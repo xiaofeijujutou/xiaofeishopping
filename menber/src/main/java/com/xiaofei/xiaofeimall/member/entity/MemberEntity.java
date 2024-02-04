@@ -92,5 +92,12 @@ public class MemberEntity implements Serializable {
 	 * 注册时间
 	 */
 	private Date createTime;
-
+	/**
+	 * 用户社交类型,0是微博
+	 */
+	private Integer socialType;
+	/**
+	 * 用户的社交id
+	 */
+	private String socialUid;
 }
