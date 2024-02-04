@@ -66,10 +66,11 @@
         </b>
         <ul>
             <li>
-                <a href="http://auth.xiaofeimall.com/login.html" class="li_2">你好，请登录</a>
+            <a th:if="${session.member == null}" href="http://auth.xiaofeimall.com/login.html" class="li_2">你好，请登录</a>
+            <a th:if="${session.member != null}">欢迎, [[${session.member.username}]]</a>
             </li>
             <li>
-                <a href="http://auth.xiaofeimall.com/reg.html">免费注册</a>
+                <a th:if="${session.member == null}" href="http://auth.xiaofeimall.com/reg.html" style="color: red;">免费注册</a>
             </li>
             <span>|</span>
             <li>

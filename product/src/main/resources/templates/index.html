@@ -95,15 +95,18 @@
   					</b>
         <ul>
           <li>
-            <a href="http://auth.xiaofeimall.com/login.html">你好，请登录</a>
+            <a th:if="${session.member != null}">欢迎, [[${session.member.username}]]</a>
+            <a th:if="${session.member == null}" href="http://auth.xiaofeimall.com/login.html">你好，请登录</a>
           </li>
           <li>
-            <a href="http://auth.xiaofeimall.com/reg.html" class="li_2">免费注册</a>
+            <a th:if="${session.member == null}" href="http://auth.xiaofeimall.com/reg.html" class="li_2">免费注册</a>
           </li>
-
+          <li>
+            <a th:if="${session.member != null}" href="http://auth.xiaofeimall.com/logout" class="li_2">立即退出</a>
+          </li>
           <span>|</span>
           <li>
-            <a href="/static/#">我的订单</a>
+            <a href="http://member.gulimall.com/memberOrder.html">我的订单</a>
           </li>
 
 

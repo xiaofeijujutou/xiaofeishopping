@@ -13,4 +13,8 @@ public class AuthServerConstant {
      * 注册服务的Redis前缀
      */
     public static final String SMS_CODE_CACHE_PREFIX = "sms:code";
+    /**
+     * 用户登录成功之后存放的全局session的前缀;
+     */
+    public static final String OAUTH_SESSION_PREFIX = "member";
 }

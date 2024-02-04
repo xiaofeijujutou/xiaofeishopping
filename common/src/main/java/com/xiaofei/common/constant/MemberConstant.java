@@ -11,8 +11,12 @@ public enum MemberConstant {
 
 
     USER_NORMAL_STATUS(1,"启用状态"),
-    USER_ABNORMAL_STATUS(0,"禁用状态"),;
+    USER_ABNORMAL_STATUS(0,"禁用状态");
 
+
+    public static final int SEX_MAN = 1;
+    public static final int SEX_WOMAN = 0;
+    public static final int SEX_UNKNOWN = -1;
 
 
 
