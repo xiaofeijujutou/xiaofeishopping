@@ -6,6 +6,8 @@ import com.xiaofei.common.utils.R;
 import com.xiaofei.xiaofeimall.member.entity.MemberEntity;
 import com.xiaofei.xiaofeimall.member.vo.CheckUniquenessVo;
 import com.xiaofei.xiaofeimall.member.vo.MenberRegisterVo;
+import com.xiaofei.xiaofeimall.member.vo.UserLoginVo;
+import com.xiaofei.xiaofeimall.member.vo.WeiboAccessTokenVo;
 
 import java.util.Map;
 
@@ -23,5 +25,9 @@ public interface MemberService extends IService<MemberEntity> {
     R register(MenberRegisterVo vo);
 
     R checkUniqueness(CheckUniquenessVo vo);
+
+    R login(UserLoginVo vo);
+
+    R weiboOauthLogin(WeiboAccessTokenVo vo);
 }
 

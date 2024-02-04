@@ -6,6 +6,8 @@ import java.util.Map;
 
 import com.xiaofei.xiaofeimall.member.vo.CheckUniquenessVo;
 import com.xiaofei.xiaofeimall.member.vo.MenberRegisterVo;
+import com.xiaofei.xiaofeimall.member.vo.UserLoginVo;
+import com.xiaofei.xiaofeimall.member.vo.WeiboAccessTokenVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,6 +31,28 @@ import javax.validation.Valid;
 public class MemberController {
     @Autowired
     private MemberService memberService;
+
+    /**
+     * 用户微博社交登录,如果是第一次登录就是注册,已经注册过了就是登录;
+     * @param vo 微博accessToken
+     * @return 结果+实体类
+     */
+    @ResponseBody
+    @PostMapping("/weiboOauth/login")
+    public R weiboOauthLogin(@RequestBody WeiboAccessTokenVo vo){
+        return memberService.weiboOauthLogin(vo);
+    }
+
+    /**
+     * 用户登录,返回用户是否登录成功;
+     * @param vo 账号密码
+     * @return 结果+实体类
+     */
+    @ResponseBody
+    @PostMapping("/login")
+    public R login(@RequestBody UserLoginVo vo){
+        return memberService.login(vo);
+    }
 
     /**
      * 检验用户名,手机号是否已经注册过了;

@@ -20,10 +20,10 @@ public class MyWebConfig implements WebMvcConfigurer {
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
         //前面是Mapping里面的url,后面是return待返回的视图
-        /**
-         * 用户登录小肥商城的界面
-         */
-        registry.addViewController("/login.html").setViewName("login");
+//        /**
+//         * 用户登录小肥商城的界面=>改成有session就不走login了;
+//         */
+//        registry.addViewController("/login.html").setViewName("login");
         /**
          * 用户注册小肥商城的界面
          */
