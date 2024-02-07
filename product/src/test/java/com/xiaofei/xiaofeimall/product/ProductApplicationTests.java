@@ -2,25 +2,18 @@ package com.xiaofei.xiaofeimall.product;
 
 //import com.aliyun.oss.OSSClient;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.beust.ah.A;
 import com.xiaofei.xiaofeimall.product.dao.AttrGroupDao;
 import com.xiaofei.xiaofeimall.product.dao.SkuSaleAttrValueDao;
 import com.xiaofei.xiaofeimall.product.entity.BrandEntity;
 import com.xiaofei.xiaofeimall.product.service.BrandService;
-import com.xiaofei.xiaofeimall.product.service.impl.AttrGroupServiceImpl;
 import com.xiaofei.xiaofeimall.product.vo.SkuItemSaleAttrVo;
-import com.xiaofei.xiaofeimall.product.vo.SpuItemAttrGroupVo;
 import org.junit.Test;
-//import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.annotation.Resource;
-import java.io.FileInputStream;
-import java.io.InputStream;
-import java.lang.invoke.LambdaMetafactory;
 import java.util.List;
 
 @RunWith(SpringRunner.class)

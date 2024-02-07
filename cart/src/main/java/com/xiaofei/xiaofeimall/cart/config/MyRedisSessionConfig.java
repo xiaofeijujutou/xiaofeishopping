@@ -1,4 +1,4 @@
-package com.xiaofei.xiaofeimall.product.config;
+package com.xiaofei.xiaofeimall.cart.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,7 +16,7 @@ import org.springframework.session.web.http.DefaultCookieSerializer;
  */
 
 @Configuration
-public class XiaofeiMallSessionConfig {
+public class MyRedisSessionConfig {
     /**
      * 配置Session作用域等Session常规配置
      * @return
