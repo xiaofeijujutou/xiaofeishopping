@@ -206,7 +206,7 @@
         <div class="header_main_left">
           <ul>
             <li  th:each="category : ${categorys}">
-              <a href="/static//static/#" class="header_main_left_a"  th:attr="ctg-data=${category.catId}"><b th:text="${category.name}"></b></a>
+              <a th:href="'http://search.xiaofeimall.com/list.html?keyword=' + ${category.name}" class="header_main_left_a"  th:attr="ctg-data=${category.catId}"><b th:text="${category.name}"></b></a>
             </li>
           </ul>
 
@@ -247,8 +247,8 @@
               <div class="user_info_show">
                 <p class="">Hi, 欢迎来到!</p>
                 <p>
-                  <a href="/static/#" class="">登录</a>
-                  <a href="/static/#" class="">注册</a>
+                  <a href="http://auth.xiaofeimall.com/login.html" class="">登录</a>
+                  <a href="http://auth.xiaofeimall.com/reg.html" class="">注册</a>
                 </p>
               </div>
             </div>

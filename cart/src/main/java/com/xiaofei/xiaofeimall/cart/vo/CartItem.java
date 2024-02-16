@@ -14,7 +14,7 @@ import java.util.List;
  */
 
 
-class CartItem {
+public class CartItem {
     /**
      * 商品的可以售卖的id
      */

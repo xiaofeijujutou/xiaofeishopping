@@ -5,17 +5,14 @@ import java.util.Map;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.xiaofei.xiaofeimall.product.entity.SkuSaleAttrValueEntity;
 import com.xiaofei.xiaofeimall.product.service.SkuSaleAttrValueService;
 import com.xiaofei.common.utils.PageUtils;
 import com.xiaofei.common.utils.R;
 
+import javax.websocket.server.PathParam;
 
 
 /**
@@ -30,6 +27,17 @@ import com.xiaofei.common.utils.R;
 public class SkuSaleAttrValueController {
     @Autowired
     private SkuSaleAttrValueService skuSaleAttrValueService;
+
+
+    /**
+     * 根据id查对应的attr属性
+     * @param skuId id
+     * @return List集合
+     */
+    @GetMapping("/attrList/{skuId}")
+    public R getSkuSaleAttrValuesById(@PathVariable("skuId") Long skuId){
+        return skuSaleAttrValueService.getSkuSaleAttrValuesById(skuId);
+    }
 
     /**
      * 列表

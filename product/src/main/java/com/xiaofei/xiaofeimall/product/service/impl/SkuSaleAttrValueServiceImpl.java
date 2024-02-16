@@ -1,5 +1,6 @@
 package com.xiaofei.xiaofeimall.product.service.impl;
 
+import com.xiaofei.common.utils.R;
 import com.xiaofei.xiaofeimall.product.vo.SkuItemSaleAttrVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -42,6 +43,17 @@ public class SkuSaleAttrValueServiceImpl extends ServiceImpl<SkuSaleAttrValueDao
     @Override
     public List<SkuItemSaleAttrVo> getSaleAttrValueBySpuId(Long spuId) {
         return skuSaleAttrValueDao.getSaleAttrValueBySpuId(spuId);
+    }
+
+    /**
+     * 根据id查对应的attr属性
+     * @param skuId id
+     * @return List集合
+     */
+    @Override
+    public R getSkuSaleAttrValuesById(Long skuId) {
+        List<String> attrs = skuSaleAttrValueDao.getSkuSaleAttrValuesById(skuId);
+        return R.ok().put("data", attrs);
     }
 
 }

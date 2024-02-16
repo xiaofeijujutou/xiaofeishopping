@@ -23,8 +23,17 @@
 
 					</ul>
 					<ul class="header-right">
-						<li><a href="/static/cart/登录页面\index.html" style="color: red;">你好，请登录</a></li>
-						<li><a href="/static/cart/注册页面\index.html">免费注册</a></li>
+						<li>
+							<a th:if="${session.member == null}" href="http://auth.xiaofeimall.com/login.html" style="color: red;"
+							   >你好，请登录</a>
+							<a th:if="${session.member != null}" th:text="${#strings.length(session.member.username) > 8 ? #strings.substring(session.member.username, 0, 8) + '...' : session.member.username}">用户名</a>
+						</li>
+						<li>
+							<a th:if="${session.member == null}" href="http://auth.xiaofeimall.com/reg.html"
+							   style="color: red;">免费注册</a>
+						</li>
+<!--						<li><a href="/static/cart/登录页面\index.html" style="color: red;">你好，请登录</a></li>-->
+<!--						<li><a href="/static/cart/注册页面\index.html">免费注册</a></li>-->
 						<li class="spacer"></li>
 						<li><a href="">我的订单</a></li>
 						<li class="spacer"></li>
@@ -44,7 +53,7 @@
 			<div class="one_sousuo">
 				<div class="one_search_top">
 					<div class="one_top_left">
-						<a href="/static/cart/" class="one_left_logo"><img src="img/logo1.jpg"></a>
+						<a href="http://xiaofeimall.com" class="one_left_logo"><img src="/static/cart/img/logo1.jpg"></a>
 						<a href="#" class="one_left_link">购物车</a>
 					</div>
 					<div class="one_top_right">
@@ -52,7 +61,7 @@
 						<input type="button" value="搜索" class="one_right_btn">
 					</div>
 				</div>
-				<div class="one_search_load" th:if="${userId}==null">
+				<div class="one_search_load" th:if="${session.member == null}">
 					<img src="/static/cart/img/shop_07.jpg" class="one_load_wraing">
 					<span>您还没有登录！登录后购物车的商品将保存到您账号中</span>
 					<a href="#"><input type="button" onclick="login()" value="立即登录" class="one_load_btn"></a>
@@ -68,9 +77,9 @@
 					</div>
 
 				</div>
-				<div class="One_ShopTop">
+				<div class="One_ShopTop" th:with="allCheckValue=${#httpServletRequest.getParameter('allCheck')}">
 					<ul>
-						<li><input type="checkbox" class="allCheck">全选</li>
+						<li><input type="checkbox" class="allCheck" th:checked="${allCheckValue eq 'true'}">全选</li>
 						<li>商品</li>
 						<li>单价</li>
 						<li>数量</li>
@@ -80,85 +89,52 @@
 				</div>
 
 				<div class="One_ShopCon">
-					<ul>
-						<li th:each="cartInfo:${cartList}">
-							<div> </div>
-
+					<h1 th:if="${cart.items == null}">
+						购物车还没有商品，<a href="http://xiaofeimall.com/">去购物</a>
+					</h1>
+					<ul th:if="${cart.items != null}">
+						<li th:each="item:${cart.items}">
+							<div>
+							</div>
 							<div>
 								<ol>
-									<li><input type="checkbox" class="check" th:value="${cartInfo.skuId}" onchange="checkSku(this)" th:checked="(${cartInfo.isChecked}==1)?'true':'false'" /></li>
+									<li><input type="checkbox" th:attr="skuId=${item.skuId}" class="itemChecked" th:checked="${item.check}"></li>
 									<li>
-										<dt><img th:src="${cartInfo.imgUrl}" src="img\shop1.jpg" alt=""></dt>
-										<dd th:onclick="'toItem('+${cartInfo.skuId}+')'">
+										<dt><img th:src="${item.image}" alt=""></dt>
+										<dd style="width: 300px;">
 											<p>
-												<span th:text="${cartInfo.skuName}">TCL 55A950C 55英寸32核</span>
+												<span th:text="${item.title}">TCL 55A950C 55英寸32核</span>
+												<br/>
+												<span th:each="attr:${item.skuAttrValues}" th:text="${attr}">尺码: 55时 超薄曲面 人工智能</span>
 											</p>
 										</dd>
 									</li>
 									<li>
-										<p class="dj" th:text="'￥'+${cartInfo.skuPrice}">4599.00</p>
+										<p class="dj" th:text="'￥' + ${#numbers.formatDecimal(item.price,1,2)}">￥4599.00</p>
+
 									</li>
 									<li>
-										<p>
-											<span>-</span>
-											<span th:text="${cartInfo.skuNum}">5</span>
-											<span>+</span>
+										<p th:attr="skuId=${item.skuId}">
+											<span class="countOpsBtn">-</span>
+											<span class="countOpsNum" th:text="${item.count}">5</span>
+											<span class="countOpsBtn">+</span>
 										</p>
+
 									</li>
-									<li style="font-weight:bold">
-										<p class="zj" th:text="'￥'+${cartInfo.totalPrice}">￥22995.00</p>
-									</li>
+									<li style="font-weight:bold"><p class="zj">￥[[${#numbers.formatDecimal(item.totalPrice,3,2)}]]</p></li>
 									<li>
-										<p>删除</p>
+										<p class="deleteItemBtn" th:attr="skuId=${item.skuId}">删除</p>
 									</li>
 								</ol>
 							</div>
 						</li>
-						<!--<li>
-                    <div>
-                    </div>
-                    <div>
-                        <ol>
-                            <li><input type="checkbox"  class="check"></li>
-                            <li>
-                                <dt><img src="img\shop1.jpg" alt=""></dt>
-                                <dd>
-                                    <p>
 
-                                        <span>TCL 55A950C 55英寸32核</span>
-                                        <span>尺码: 55时 超薄曲面 人工智能</span>
-                                    </p>
-                                    <p>人工智能 HDR曲面超薄4K电视金属机</p>
-
-                                </dd>
-                            </li>
-                            <li>
-                                <p class="dj">￥4599.00</p>
-
-                            </li>
-                            <li>
-                                <p>
-                                    <span>-</span>
-                                    <span>5</span>
-                                    <span>+</span>
-                                </p>
-
-                            </li>
-                            <li style="font-weight:bold"><p class="zj">￥22995.00</p></li>
-                            <li>
-                                <p>删除</p>
-
-                            </li>
-                        </ol>
-                    </div>
-                </li>-->
-
-					</ul>
+					</ul >
 				</div>
 				<div class="One_ShopFootBuy fix1">
 					<div>
 						<ul>
-							<li><input type="checkbox" class="allCheck"><span>全选</span></li>
+
 							<li>删除选中的商品</li>
 							<li>移到我的关注</li>
 							<li>清除下柜商品</li>
@@ -174,8 +150,8 @@
 					</div>
 					<div>
 						<ol>
-							<li>总价:<span style="color:#e64346;font-weight:bold;font-size:16px;" class="fnt">￥0.00</span> </li>
-
+							<li>总价:<span style="color:#e64346;font-weight:bold;font-size:16px;" class="fnt">￥[[${#numbers.formatDecimal(cart.totalAmount, 3, 2)}]]</span>
+							<li>优惠：￥[[${#numbers.formatDecimal(cart.reduce,1,2)}]]</li>
 						</ol>
 					</div>
 					<div><button onclick="toTrade()" type="button">去结算</button></div>
@@ -197,7 +173,7 @@
 				</dl>
 			</div>
 			<div>
-				<button type="button">删除</button>
+				<button type="button" onclick="deleteItem()">删除</button>
 
 			</div>
 		</div>
@@ -245,6 +221,9 @@
 	</body>
 	<script src="/static/cart/js/index.js" charset="utf-8"></script>
 	<script type="text/javascript">
+
+
+
 		function toTrade() {
 			window.location.href = "http://cart.gmall.com:8087/toTrade";
 		}
@@ -254,8 +233,9 @@
 		}
 
 		function login() {
+			//回调页面;
 			var s = encodeURIComponent("http://cart.gmall.com:8087/cartList");
-			window.location.href = "http://passport.atguigu.com/index?originUrl=" + s;
+			window.location.href = "http://auth.xiaofeimall.com/login.html";
 		}
 
 		function checkSku(chkbox) {
@@ -797,6 +777,37 @@
 			$(this).children("p").children("img").attr("src", "img/one_mian_gwc2.png")
 		}).mouseout(function() {
 			$(this).children("p").children("img").attr("src", "img/one_mian_gwc1.png")
-		})
+		});
+
+
+
+		//改变选中和没选中状态
+		$(".itemChecked").click(function () {
+			const skuId = $(this).attr("skuId");
+			const checked = $(this).prop("checked");
+			location.href = "http://cart.xiaofeimall.com/checkItem?skuId=" + skuId + "&check=" + (checked ? 1 : 0);
+		});
+		//全选
+		var allCheckSigh = localStorage.getItem("allCheckSigh") || 0;
+		$(".allCheck").click(function () {
+			allCheckSigh = parseInt(allCheckSigh) + 1;
+			localStorage.setItem("allCheckSigh", allCheckSigh);
+			location.href = "http://cart.xiaofeimall.com/allCheckItem?allCheckSigh=" + (allCheckSigh % 2 == 0);
+		});
+
+		//修改购物车统计数量
+		$(".countOpsBtn").click(function () {
+			const skuId = $(this).parent().attr("skuId");
+			const num = $(this).parent().find(".countOpsNum").text();
+			location.href = "http://cart.xiaofeimall.com/countItem?skuId=" + skuId + "&num=" + num;
+		});
+		//删除购物车项
+		let deleteId = 0;
+		$(".deleteItemBtn").click(function () {
+			deleteId = $(this).attr("skuId");
+		});
+		function deleteItem() {
+			location.href = "http://cart.xiaofeimall.com/deleteItem?skuId=" + deleteId;
+		}
 	</script>
 </html>

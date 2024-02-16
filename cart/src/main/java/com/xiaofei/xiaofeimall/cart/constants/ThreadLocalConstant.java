@@ -18,5 +18,7 @@ public class ThreadLocalConstant {
     /**
      * ThreadLocal的key,专门用来获取userInfoTo
      */
-    public static final String KEY_OF_USERINFOTO = "userInfo";
+    public static final String KEY_OF_USER_INFO_TO = "userInfo";
+
+
 }

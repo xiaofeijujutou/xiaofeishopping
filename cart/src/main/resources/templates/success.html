@@ -26,15 +26,15 @@
 
         <ul class="hd_wrap_right">
         <li class="forel">
-        <a href="/javascript:;" class="link_login">你好,请登录</a>&nbsp;
-    <a href="/javascript:;" class="link_regist">免费注册</a>
+        <a href="http://auth.xiaofeimall.com/login.html" class="link_login">你好,请登录</a>&nbsp;
+    <a href="http://auth.xiaofeimall.com/reg.html" class="link_regist">免费注册</a>
         </li>
         <li class="spacer"></li>
 
         <li>
         <a href="/javascript:;">我的订单</a>
         </li>
-              
+
         </ul>
 
         </div>
@@ -66,13 +66,13 @@
         <h3 class="ftx-02">商品已成功加入购物车</h3></div>
     <div class="p-item">
         <div class="p-img">
-        <a href="/javascript:;" target="_blank"><img style="height: 60px;width:60px;"  th:src="${skuInfo?.skuDefaultImg}" src="/img/shop1.jpg"></a>
+        <a th:href="'http://item.xiaofeimall.com/'+${cartItem.skuId}+'.html'" target="_blank"><img style="height: 60px;width:60px;"  th:src="${cartItem.image}" src="/img/shop1.jpg"></a>
         </div>
         <div class="p-info">
         <div class="p-name">
-        <a th:href="'http://item.gmall.com/'+${skuInfo?.id}+'.html'"  th:text="${skuInfo?.skuName}"  >TCL 55A950C 55英寸32核人工智能 HDR曲面超薄4K电视金属机身（枪色）</a>
+        <a th:href="'http://item.xiaofeimall.com/'+${cartItem.skuId}+'.html'"  th:text="${cartItem.title}"  >TCL 55A950C 55英寸32核人工智能 HDR曲面超薄4K电视金属机身（枪色）</a>
     </div>
-    <div class="p-extra"> <span class="txt" th:text="'数量：'+${skuNum}" >  数量：1</span></div>
+    <div class="p-extra"> <span class="txt" th:text="'数量：'+${cartItem.count}" >  数量：1</span></div>
     </div>
     <div class="clr"></div>
         </div>
@@ -83,8 +83,8 @@
         </div>
         <div class="clr"></div>
         <div class="bg_shop">
-        <a class="btn-tobback" th:href="'http://item.gmall.com:8084/'+${skuInfo?.id}+'.html'">查看商品详情</a>
-        <a class="btn-addtocart"  href="http://cart.gmall.com:8087/cartList" id="GotoShoppingCart"><b></b>去购物车结算</a>
+        <a class="btn-tobback" th:href="'http://item.xiaofeimall.com/'+${cartItem.skuId}+'.html'">查看商品详情</a>
+        <a class="btn-addtocart"  href="http://cart.xiaofeimall.com/cartList.html" id="GotoShoppingCart"><b></b>去购物车结算</a>
    </div>
     </div>
     </div>
