@@ -44,13 +44,13 @@ public class SkuInfoController {
 
 
     /**
-     * 信息
+     * 接收skuId,返回对应的一条实体类
+     * @param skuId id
+     * @return 实体类;
      */
     @RequestMapping("/info/{skuId}")
-    //@RequiresPermissions("product:skuinfo:info")
     public R info(@PathVariable("skuId") Long skuId){
 		SkuInfoEntity skuInfo = skuInfoService.getById(skuId);
-
         return R.ok().put("skuInfo", skuInfo);
     }
 

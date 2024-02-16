@@ -31,7 +31,7 @@ public class XiaofeiShoppingExceptionAdvice {
 
     @ExceptionHandler(value = Exception.class)
     public R handleException(Exception e){
-        System.out.println(e);
+        e.printStackTrace();
         return R.error(BizCodeEnume.UNKNOW_EXCEPTION.getCode(), BizCodeEnume.UNKNOW_EXCEPTION.getMsg());
     }
 }
