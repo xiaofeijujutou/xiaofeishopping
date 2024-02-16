@@ -14,15 +14,17 @@
         <module name="thirdpart" />
         <module name="xiaofeimall-comment" />
         <module name="order" />
-        <module name="auth-server" />
-        <module name="renren-fast" />
         <module name="ware" />
+        <module name="cart" />
+        <module name="renren-fast" />
+        <module name="auth-server" />
         <module name="coupon" />
         <module name="renren-generator" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="auth-server" target="1.8" />
+      <module name="cart" target="1.8" />
       <module name="coupon" target="1.8" />
       <module name="gateway" target="1.8" />
       <module name="menber" target="1.8" />
@@ -41,6 +43,7 @@
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="auth-server" options="-parameters" />
+      <module name="cart" options="-parameters" />
       <module name="coupon" options="-parameters" />
       <module name="gateway" options="-parameters" />
       <module name="menber" options="-parameters" />
