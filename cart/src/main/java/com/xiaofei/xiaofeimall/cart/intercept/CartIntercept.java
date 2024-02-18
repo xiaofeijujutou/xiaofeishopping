@@ -46,22 +46,20 @@ public class CartIntercept implements HandlerInterceptor {
                 userInfoTo.setUserKey(cookie.getValue());
             }
         }
-
         if (member != null) {
             //登录了,还是要判断user-key,来判断是否清空购物车;
             userInfoTo.setUserId(member.getId());
         }
-        if (member == null) {
+        if (member == null && StringUtils.isEmpty(userInfoTo.getUserKey())) {
             //没登录有user-key->找出user-key放入线程存储
             //没登录且没有user-key->创建临时用户;
-            if (StringUtils.isEmpty(userInfoTo.getUserKey())) {
-                String userKey = UUID.randomUUID().toString().replace("-", "");
-                userInfoTo.setUserKey(userKey);
-                Cookie cookie = new Cookie(CartConstant.TEMP_USER_COOKIE_KEY, userKey);
-                cookie.setDomain("xiaofeimall.com");
-                cookie.setMaxAge(CartConstant.TEMP_USER_COOKIE_TTL);
-                response.addCookie(cookie);
-            }
+            String userKey = UUID.randomUUID().toString().replace("-", "");
+            userInfoTo.setUserKey(userKey);
+            Cookie cookie = new Cookie(CartConstant.TEMP_USER_COOKIE_KEY, userKey);
+            cookie.setDomain("xiaofeimall.com");
+            cookie.setMaxAge(CartConstant.TEMP_USER_COOKIE_TTL);
+            response.addCookie(cookie);
+
         }
         //向ThreadLocal存入用户数据
         Map<String, Object> cartThreadLocal = ThreadLocalConstant.cartInterceptThreadLocal.get();

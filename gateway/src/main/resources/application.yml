@@ -74,6 +74,13 @@ spring:
           predicates:
             - Host= cart.xiaofeimall.com
 
+        - id: xiaofeimall_order_routes
+          uri: lb://xiaofei-order
+          predicates:
+            - Host= order.xiaofeimall.com
+
+
+
 
 server:
   port: 86

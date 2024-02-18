@@ -224,9 +224,7 @@
 
 
 
-		function toTrade() {
-			window.location.href = "http://cart.gmall.com:8087/toTrade";
-		}
+
 
 		function toItem(skuId) {
 			window.location.href = "http://item.gmall.com:8084/" + skuId + ".html";
@@ -808,6 +806,10 @@
 		});
 		function deleteItem() {
 			location.href = "http://cart.xiaofeimall.com/deleteItem?skuId=" + deleteId;
+		}
+		//结算
+		function toTrade() {
+			window.location.href = "http://order.xiaofeimall.com/toTrade";
 		}
 	</script>
 </html>
