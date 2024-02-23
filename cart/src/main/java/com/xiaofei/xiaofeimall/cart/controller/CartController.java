@@ -12,8 +12,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -27,6 +29,18 @@ import java.util.Map;
 public class CartController {
     @Autowired
     CartService cartService;
+
+    /**
+     * 返回用户购物车的所有被选中商品的数据
+     * @return
+     */
+    @ResponseBody
+    @GetMapping("/getCheckedItem")
+    public List<CartItem> getCheckedItem(){
+        return cartService.getCheckedItem();
+    }
+
+
 
     /**
      * 展示用户购物车的所有数据
@@ -87,8 +101,14 @@ public class CartController {
      * @return
      */
     @GetMapping("/countItem")
-    public String countItem(@RequestParam("skuId") Long skuId, @RequestParam("num") Integer num){
-        cartService.countItem(skuId, num);
+    public String countItem(@RequestParam("skuId") Long skuId,
+                            @RequestParam("num") Integer num){
+        try {
+            cartService.countItem(skuId, num);
+        }catch (NullPointerException e){
+            log.error("用户登录过期");
+            return "redirect:http://auth.xiaofeimall.com/login.html";
+        }
         return "redirect:http://cart.xiaofeimall.com/cartList.html";
     }
 

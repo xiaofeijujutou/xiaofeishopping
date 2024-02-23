@@ -5,6 +5,9 @@ import com.xiaofei.xiaofeimall.cart.vo.CartItem;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
+import javax.servlet.http.HttpServletResponse;
+import java.util.List;
+
 /**
  * @Description: Created by IntelliJ IDEA.
  * @Author : 小肥居居头
@@ -21,9 +24,11 @@ public interface CartService {
 
     void checkItem(Long skuId, Integer check);
 
-    void countItem(Long skuId, Integer num);
+    void countItem(Long skuId, Integer num) throws NullPointerException;
 
     void deleteItem(Long skuId);
 
     void allCheckItem(Boolean allCheckSigh);
+
+    List<CartItem> getCheckedItem();
 }

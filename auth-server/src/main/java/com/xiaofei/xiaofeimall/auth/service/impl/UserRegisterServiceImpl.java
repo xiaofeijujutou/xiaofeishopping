@@ -2,7 +2,7 @@ package com.xiaofei.xiaofeimall.auth.service.impl;
 
 import com.alibaba.fastjson.TypeReference;
 import com.xiaofei.common.constant.AuthServerConstant;
-import com.xiaofei.common.exception.BizCodeEnume;
+import com.xiaofei.common.exception.BizCodeEnum;
 import com.xiaofei.common.utils.R;
 import com.xiaofei.common.vo.MemberEntityVo;
 import com.xiaofei.xiaofeimall.auth.feign.MemberPartFeignService;
@@ -78,12 +78,12 @@ public class UserRegisterServiceImpl implements UserRegisterService {
             CheckUniquenessVo checkUniquenessVo = new CheckUniquenessVo();
             BeanUtils.copyProperties(vo, checkUniquenessVo);
             R r = memberPartFeignService.checkUniqueness(checkUniquenessVo);
-            if (BizCodeEnume.SUCCESS_CODE.getCode() != r.getCode()){
+            if (BizCodeEnum.SUCCESS_CODE.getCode() != r.getCode()){
                 errors = new HashMap<>();
-                if (BizCodeEnume.USER_PHONE_EXIST_EXCEPTION.getCode() == r.getCode()){
+                if (BizCodeEnum.USER_PHONE_EXIST_EXCEPTION.getCode() == r.getCode()){
                     errors.put("phone", r.getMsg());
                 }
-                if (BizCodeEnume.USER_NAME_EXIST_EXCEPTION.getCode() == r.getCode()){
+                if (BizCodeEnum.USER_NAME_EXIST_EXCEPTION.getCode() == r.getCode()){
                     errors.put("userName", r.getMsg());
                 }
             }
@@ -129,7 +129,7 @@ public class UserRegisterServiceImpl implements UserRegisterService {
     @Override
     public String login(UserLoginVo vo, RedirectAttributes redirectAttributes, HttpSession session) {
         R loginResult = memberPartFeignService.login(vo);
-        if (loginResult.getCode() != BizCodeEnume.SUCCESS_CODE.getCode()){
+        if (loginResult.getCode() != BizCodeEnum.SUCCESS_CODE.getCode()){
             Map<String, String> errors = new HashMap<>();
             errors.put("msg", loginResult.getMsg());
             redirectAttributes.addFlashAttribute("errors", errors);

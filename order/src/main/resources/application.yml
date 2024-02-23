@@ -11,7 +11,6 @@ spring:
     driverClassName: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://192.168.72.129:3306/gulimall_oms?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai
 
-
 mybatis-plus:
   mapper-locations: classpath:/mapper/**/*.xml
   global-config:
@@ -20,3 +19,18 @@ mybatis-plus:
 
 server:
   port: 9000
+# springSession过期时间
+
+
+seata:
+  config:
+    # support: nacos 、 consul 、 apollo 、 zk  、 etcd3
+    type: nacos
+    nacos:
+      server-addr: 127.0.0.1:8848
+      namespace: public
+      group: DEFAULT_GROUP
+
+      ##if use MSE Nacos with auth, mutex with username/password attribute
+      #access-key:
+      #secret-key:

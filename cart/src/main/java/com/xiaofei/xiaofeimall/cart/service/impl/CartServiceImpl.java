@@ -21,6 +21,8 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -276,7 +278,7 @@ public class CartServiceImpl implements CartService {
      * @return
      */
     @Override
-    public void countItem(Long skuId, Integer num) {
+    public void countItem(Long skuId, Integer num) throws NullPointerException{
         BoundHashOperations<String, Object, Object> hashOperations = getHashOperations();
         CartItem cartItem = getCartItem(skuId, hashOperations);
         cartItem.setCount(num);
@@ -319,6 +321,8 @@ public class CartServiceImpl implements CartService {
 
     }
 
+
+
     /**
      * 更新用户购物车所有信息;减少IO版;
      * @param cartItems
@@ -359,5 +363,21 @@ public class CartServiceImpl implements CartService {
         return values.stream()
                 .map((cartItemObj) -> JSON.parseObject((String) cartItemObj, CartItem.class))
                 .collect(Collectors.toList());
+    }
+
+    /**
+     * 返回用户购物车的所有被选中商品的数据
+     * @return
+     */
+    @Override
+    public List<CartItem> getCheckedItem() {
+        BoundHashOperations<String, Object, Object> hashOperations = getHashOperations();
+        List<CartItem> allCartItem = getAllCartItem(hashOperations);
+        List<CartItem> checkedCartItem = null;
+        if (!CollectionUtils.isEmpty(allCartItem)){
+            //TODO 结算的时候要调用商品服务查实际价格
+            checkedCartItem = allCartItem.stream().filter(CartItem::getCheck).collect(Collectors.toList());
+        }
+        return checkedCartItem;
     }
 }

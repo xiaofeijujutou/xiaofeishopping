@@ -1,19 +1,17 @@
 package com.xiaofei.xiaofeimall.auth.exception;
 
 
-import com.xiaofei.common.exception.BizCodeEnume;
+import com.xiaofei.common.exception.BizCodeEnum;
 import com.xiaofei.common.utils.R;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -35,7 +33,7 @@ public class AuthServerExceptionAdvice {
         result.getFieldErrors().forEach((fieldError)->{
             errorMap.put(fieldError.getField(), fieldError.getDefaultMessage());
         });
-        return R.error(BizCodeEnume.VAILD_EXCEPTION.getCode(), "数据校验出现问题").put("data", errorMap);
+        return R.error(BizCodeEnum.VAILD_EXCEPTION.getCode(), "数据校验出现问题").put("data", errorMap);
     }
 
     /**
@@ -51,8 +49,8 @@ public class AuthServerExceptionAdvice {
             errors = result.getFieldErrors().stream()
                     .collect(Collectors.toMap(FieldError::getField, FieldError::getDefaultMessage, (message1, message2) -> message1));
         }
-        log.error(BizCodeEnume.VAILD_EXCEPTION.getMsg()+errors.toString());
-        return R.error(BizCodeEnume.VAILD_EXCEPTION.getCode(), BizCodeEnume.VAILD_EXCEPTION.getMsg()).put("data", errors);
+        log.error(BizCodeEnum.VAILD_EXCEPTION.getMsg()+errors.toString());
+        return R.error(BizCodeEnum.VAILD_EXCEPTION.getCode(), BizCodeEnum.VAILD_EXCEPTION.getMsg()).put("data", errors);
     }
 
 
@@ -60,6 +58,6 @@ public class AuthServerExceptionAdvice {
     @ExceptionHandler(value = Exception.class)
     public R handleException(Exception e){
         e.printStackTrace();
-        return R.error(BizCodeEnume.UNKNOW_EXCEPTION.getCode(), BizCodeEnume.UNKNOW_EXCEPTION.getMsg());
+        return R.error(BizCodeEnum.UNKNOW_EXCEPTION.getCode(), BizCodeEnum.UNKNOW_EXCEPTION.getMsg());
     }
 }
