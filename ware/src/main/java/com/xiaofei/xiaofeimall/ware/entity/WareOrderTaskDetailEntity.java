@@ -8,6 +8,7 @@ import java.util.Date;
 
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * 库存工作单
@@ -21,6 +22,7 @@ import lombok.Data;
 @TableName("wms_ware_order_task_detail")
 public class WareOrderTaskDetailEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
+
 
 	/**
 	 * id
@@ -52,4 +54,20 @@ public class WareOrderTaskDetailEntity implements Serializable {
 	 * 锁定状态;
 	 */
 	private Integer lockStatus;
+
+	public WareOrderTaskDetailEntity(){
+
+	}
+
+	public WareOrderTaskDetailEntity(Long id, Long skuId, String skuName, Integer skuNum, Long taskId,
+									 Long wareId, Integer lockStatus) {
+		this.id = id;
+		this.skuId = skuId;
+		this.skuName = skuName;
+		this.skuNum = skuNum;
+		this.taskId = taskId;
+		this.wareId = wareId;
+		this.lockStatus = lockStatus;
+	}
+
 }
