@@ -39,7 +39,7 @@ public class MyRabbitMQConfig {
     }
 
     /**
-     * 普通队列
+     * 普通队列,接收延迟队列的消息
      * @return
      */
     @Bean
@@ -78,13 +78,12 @@ public class MyRabbitMQConfig {
      */
     @Bean
     public Binding stockLocked() {
-        Binding binding = new Binding("stock.release.stock.queue",
+
+        return new Binding("stock.release.stock.queue",
                 Binding.DestinationType.QUEUE,
                 "stock-event-exchange",
                 "stock.release.#",
                 null);
-
-        return binding;
     }
 
 

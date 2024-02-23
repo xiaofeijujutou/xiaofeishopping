@@ -28,6 +28,9 @@ public class R extends HashMap<String, Object> {
 		put("data",data);
 		return this;
 	}
+	public Object getData(){
+		return get("data");
+	}
 	//利用fastJson对远程调用的实体类进行逆转
 	public <T>T getData(TypeReference<T> typeReference){
 		Object data = get("data");//默认map

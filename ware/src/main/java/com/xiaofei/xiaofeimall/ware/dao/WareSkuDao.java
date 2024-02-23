@@ -1,5 +1,6 @@
 package com.xiaofei.xiaofeimall.ware.dao;
 
+import com.xiaofei.xiaofeimall.ware.entity.WareOrderTaskDetailEntity;
 import com.xiaofei.xiaofeimall.ware.entity.WareSkuEntity;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
@@ -47,4 +48,11 @@ public interface WareSkuDao extends BaseMapper<WareSkuEntity> {
      * @return
      */
     void unLockStock(@Param("skuId") Long skuId, @Param("wareId") Long wareId, @Param("skuNum") Integer skuNum);
+
+    /**
+     * 根据一个大订单号的orderSn来查询对应的所有锁定商品
+     * @param orderSn
+     * @return
+     */
+    List<WareOrderTaskDetailEntity> getAllLockDetailEntityByOrderSn(@Param("orderSn") String orderSn);
 }

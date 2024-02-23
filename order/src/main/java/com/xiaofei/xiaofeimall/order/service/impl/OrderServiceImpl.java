@@ -3,9 +3,11 @@ package com.xiaofei.xiaofeimall.order.service.impl;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.toolkit.IdWorker;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.rabbitmq.client.Channel;
 import com.xiaofei.common.constant.OrderConstant;
 import com.xiaofei.common.utils.R;
 import com.xiaofei.common.vo.MemberEntityVo;
+import com.xiaofei.common.vo.mq.OrderEntityTo;
 import com.xiaofei.xiaofeimall.order.config.OrderThreadLocal;
 import com.xiaofei.xiaofeimall.order.entity.OrderItemEntity;
 import com.xiaofei.xiaofeimall.order.feign.CartFeignService;
@@ -15,6 +17,10 @@ import com.xiaofei.xiaofeimall.order.feign.WareFeignService;
 import com.xiaofei.xiaofeimall.order.service.OrderItemService;
 import com.xiaofei.xiaofeimall.order.to.OrderCreateTo;
 import com.xiaofei.xiaofeimall.order.vo.*;
+import lombok.extern.log4j.Log4j2;
+import org.springframework.amqp.core.Message;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.script.DefaultRedisScript;
@@ -37,7 +43,7 @@ import com.xiaofei.xiaofeimall.order.service.OrderService;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
-
+@Log4j2
 @Service("orderService")
 public class OrderServiceImpl extends ServiceImpl<OrderDao, OrderEntity> implements OrderService {
 
@@ -53,6 +59,8 @@ public class OrderServiceImpl extends ServiceImpl<OrderDao, OrderEntity> impleme
     StringRedisTemplate stringRedisTemplate;
     @Autowired
     OrderItemService orderItemService;
+    @Autowired
+    RabbitTemplate rabbitTemplate;
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
@@ -140,18 +148,18 @@ public class OrderServiceImpl extends ServiceImpl<OrderDao, OrderEntity> impleme
             return orderItemVo;
         }).collect(Collectors.toList());
         lockVo.setLocks(orderLockItemsVo);
-        //TODO 调用远程锁定库存的方法
         //出现的问题：扣减库存成功了，但是由于网络原因超时，出现异常，导致订单事务回滚，库存事务不回滚(解决方案：seata)
         //为了保证高并发，不推荐使用seata，因为是加锁，并行化，提升不了效率,可以发消息给库存服务
         R r = wareFeignService.orderLockStock(lockVo);
         if (r.getCode() == 0) {
             //锁定成功
             responseVo.setOrder(orderCreateTo.getOrder());
-             int i = 10/0;
-
-//            //TODO 订单创建成功，发送消息给MQ
-//            rabbitTemplate.convertAndSend("order-event-exchange", "order.create.order", orderCreateTo.getOrder());
-//            //删除购物车里的数据
+            //订单创建成功，发送消息给MQ,队列为延时队列,用户没支付或者用户取消订单要解锁库存
+            log.info("订单创建成功,发送消息给MQ");
+            rabbitTemplate.convertAndSend("order-event-exchange",
+                    "order.delay",
+                    orderCreateTo.getOrder());
+            //删除购物车里的数据
 //            stringRedisTemplate.delete(CART_PREFIX + memberResponseVo.getId());
             return responseVo;
         } else {
@@ -164,7 +172,32 @@ public class OrderServiceImpl extends ServiceImpl<OrderDao, OrderEntity> impleme
         }
 
     }
-
+    /**
+     * 监听的是从延时队列过来的数据,也是就是已经结果30分钟沉淀的数据
+     * 需要执行的逻辑就是:关单,发送消息给仓库解锁库存;
+     * 原逻辑:关单之后修改个状态码,然后等仓储服务来查,再根据状态码解锁,订单先,仓储后,有时间差;
+     * 缺陷:如果机器的延迟大于时间差,那就不会解锁库存
+     * 设计:关单成功修改状态码之后,还要发个消息给Ware服务,让他解锁库存,消息为整个订单锁定的商品库存消息;
+     * 这样即使解锁库存在先,这里还有一个解锁库存,而且多次解锁库存不会影响最终结果;
+     * @param orderEntityMQ
+     */
+    @Override
+    public void closeOrder(OrderEntity orderEntityMQ) {
+        OrderEntity orderEntity = this.getById(orderEntityMQ.getId());
+        //如果到时间了还是代付款,说明用户没付款
+        if (orderEntity.getStatus() == OrderConstant.OrderStatusEnum.CREATE_NEW.getCode()){
+            //这里只要改成4就行了,到时候解锁库存的服务回来远程调用,发现状态是4就会解锁库存
+            orderEntity.setStatus(OrderConstant.OrderStatusEnum.CANCLED.getCode());
+            this.updateById(orderEntity);
+            log.info("用户:" + orderEntity.getMemberUsername() + "下订单超时,已处理");
+            OrderEntityTo orderEntityTo = new OrderEntityTo();
+            BeanUtils.copyProperties(orderEntity, orderEntityTo);
+            rabbitTemplate.convertAndSend("order-event-exchange",
+                    "order.release.ware",
+                    orderEntityTo);
+            log.info("过期商品:" + orderEntity.getOrderSn() + "发送解锁库存消息成功");
+        }
+    }
     /**
      * 根据订单号orderSn查询实体类
      * @param orderSn
@@ -174,6 +207,8 @@ public class OrderServiceImpl extends ServiceImpl<OrderDao, OrderEntity> impleme
     public OrderEntity getOrderStatus(String orderSn) {
         return this.baseMapper.selectOne(Wrappers.<OrderEntity>lambdaQuery().eq(OrderEntity::getOrderSn, orderSn));
     }
+
+
 
     /**
      * 验证唯一性,防止重复下单,没有重复下单返回false
@@ -211,6 +246,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderDao, OrderEntity> impleme
         String orderSn = IdWorker.getTimeId();
         OrderEntity orderEntity = new OrderEntity();
         orderEntity.setOrderSn(orderSn);
+        orderEntity.setStatus(OrderConstant.OrderStatusEnum.CREATE_NEW.getCode());
         orderEntity.setMemberId(member.getId());
         orderEntity.setMemberUsername(member.getUsername());
         R fare = wareFeignService.getFare(submitOrderVo.getAddrId());

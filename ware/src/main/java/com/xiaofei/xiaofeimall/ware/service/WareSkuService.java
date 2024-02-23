@@ -3,6 +3,7 @@ package com.xiaofei.xiaofeimall.ware.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.rabbitmq.client.Channel;
 import com.xiaofei.common.utils.PageUtils;
+import com.xiaofei.common.vo.mq.OrderEntityTo;
 import com.xiaofei.common.vo.mq.StockLockedTo;
 import com.xiaofei.xiaofeimall.ware.entity.WareSkuEntity;
 import com.xiaofei.xiaofeimall.ware.vo.LockStockResultVo;
@@ -30,6 +31,8 @@ public interface WareSkuService extends IService<WareSkuEntity> {
 
     Boolean orderLockStock(WareSkuLockVo vo);
 
-    void stockLockedRelease(StockLockedTo to, Message message, Channel channel);
+    void stockLockedRelease(StockLockedTo to) throws Exception;
+
+    void unlockStock(OrderEntityTo orderEntityTo) throws Exception;
 }
 
