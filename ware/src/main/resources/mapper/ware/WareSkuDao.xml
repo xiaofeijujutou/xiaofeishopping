@@ -34,5 +34,13 @@
         SELECT ware_id FROM `wms_ware_sku` WHERE sku_id=#{skuId} AND stock - stock_locked > 0;
     </select>
 
+    <select id="getAllLockDetailEntityByOrderSn"
+            resultType="com.xiaofei.xiaofeimall.ware.entity.WareOrderTaskDetailEntity">
+        SELECT otd.*
+        FROM wms_ware_order_task ot
+        LEFT JOIN wms_ware_order_task_detail otd on otd.task_id = ot.id
+        WHERE ot.order_sn = #{orderSn};
+    </select>
+
 
 </mapper>

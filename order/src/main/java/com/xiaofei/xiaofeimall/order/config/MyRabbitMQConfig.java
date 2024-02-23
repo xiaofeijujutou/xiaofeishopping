@@ -78,6 +78,7 @@ public class MyRabbitMQConfig {
 
     /**
      * 使用建造者来绑定交换机和队列的关系
+     * 这里绑定的是交换机和释放队列的关系
      * @param orderReleaseOrderQueue 队列
      * @param orderEventExchange 交换机
      * @return
@@ -91,15 +92,22 @@ public class MyRabbitMQConfig {
                 .and(null);
     }
 
-    /**
-     * 监听者,用来接收队列消息,也可以称为消费者
-     * @param entity
-     */
-    @RabbitListener(queues = "order.release.order.queue")
-    public void listener(OrderEntity entity){
-        System.out.println(entity);
-        System.out.println("收到队列,准备释放订单");
 
+    /**
+     * 订单交换机<==>库存释放队列;
+     * 作用:订单超时后发送消息给库存让库存解锁;
+     * 路由键order.release.ware
+     * @return
+     */
+    @Bean
+    public Binding orderReleaseOrderBinding(){
+        return new Binding("stock.release.stock.queue", //绑定库存释放队列
+                Binding.DestinationType.QUEUE,
+                "order-event-exchange",
+                "order.release.ware",
+                null);
     }
+
+
 
 }

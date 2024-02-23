@@ -1,10 +1,14 @@
 package com.xiaofei.xiaofeimall.ware.service.impl;
 
 import com.alibaba.nacos.client.utils.StringUtils;
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.rabbitmq.client.Channel;
 import com.xiaofei.common.constant.OrderConstant;
+import com.xiaofei.common.constant.WareConstant;
 import com.xiaofei.common.exception.BizCodeEnum;
 import com.xiaofei.common.utils.R;
+import com.xiaofei.common.vo.mq.OrderEntityTo;
 import com.xiaofei.common.vo.mq.StockDetailTo;
 import com.xiaofei.common.vo.mq.StockLockedTo;
 import com.xiaofei.xiaofeimall.ware.entity.WareOrderTaskDetailEntity;
@@ -69,11 +73,12 @@ public class WareSkuServiceImpl extends ServiceImpl<WareSkuDao, WareSkuEntity> i
      *          2、有这个订单，不一定解锁库存
      *              订单状态：已取消：解锁库存
      *                      已支付：不能解锁库存(表示商品已经卖了,不能解锁);
+     *
+     * 抛异常是拒绝ack, 不抛异常是ack
      * @param to
-     * @param message
      */
     @Override
-    public void stockLockedRelease(StockLockedTo to, Message message, Channel channel){
+    public void stockLockedRelease(StockLockedTo to) throws Exception{
         log.info("收到解锁库存消息");
         Long lockDetailId = to.getDetailTo().getId();
         WareOrderTaskDetailEntity lockDetailEntity = wareOrderTaskDetailService.getById(lockDetailId);
@@ -82,45 +87,55 @@ public class WareSkuServiceImpl extends ServiceImpl<WareSkuDao, WareSkuEntity> i
             return;
         }
         WareOrderTaskEntity taskEntity = wareOrderTaskService.getById(to.getId());
-        String orderSn = taskEntity.getOrderSn();
-        R orderEntityResult = orderFeignService.getOrderStatus(orderSn);
-        try{
-            if (orderEntityResult.getCode() == BizCodeEnum.SUCCESS_CODE.getCode()){
-                OrderEntityVo orderEntityVo = orderEntityResult.getData(OrderEntityVo.class);
-                //订单不存在 || 用户取消订单,解锁
-                if (orderEntityVo == null ||
-                        orderEntityVo.getStatus() == OrderConstant.OrderStatusEnum.CANCLED.getCode()) {
-                    unLockStock(to.getDetailTo().getSkuId(), to.getDetailTo().getWareId(), to.getDetailTo().getSkuNum(), lockDetailId);
-                    //手动ack;
-                    channel.basicAck(message.getMessageProperties().getDeliveryTag(), false);
-                }
-            }else {
-                //订单没有取消,可能支付了,不回滚,ack
-                channel.basicAck(message.getMessageProperties().getDeliveryTag(), false);
-            }
-        }catch (IOException e){
-            log.error("解锁库存出现异常,重新放回数据");
-            e.printStackTrace();
-            try {
-                channel.basicReject(message.getMessageProperties().getDeliveryTag(), true);
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
+        //远程调用
+        R orderResult = orderFeignService.getOrderStatus(taskEntity.getOrderSn());
+        if (orderResult.getCode() != BizCodeEnum.SUCCESS_CODE.getCode() && ObjectUtils.isEmpty(orderResult.getData())){
+            log.error("远程调用订单失败,消息重新入队");
+            throw new Exception("远程调用订单失败,消息重新入队");
         }
+        OrderEntityVo orderEntityVo = orderResult.getData(OrderEntityVo.class);
+        //取消订单,订单没付钱,就要解除库存
+        if (orderEntityVo.getStatus() == OrderConstant.OrderStatusEnum.CANCLED.getCode() ||
+                orderEntityVo.getStatus() == OrderConstant.OrderStatusEnum.CREATE_NEW.getCode()){
+            unLockStock(lockDetailEntity.getSkuId(), lockDetailEntity.getWareId(),
+                    lockDetailEntity.getSkuNum(), lockDetailEntity.getId());
+        }
+        //商品已经支付,发货,签收,不用调用unlock,直接ack就行
     }
+
+    @Override
+    public void unlockStock(OrderEntityTo orderEntityTo) throws Exception {
+        //TODO 远程再查一次;
+        List<WareOrderTaskDetailEntity> lockDetailEntities =
+                this.baseMapper.getAllLockDetailEntityByOrderSn(orderEntityTo.getOrderSn());
+        for (WareOrderTaskDetailEntity lockItem : lockDetailEntities) {
+            unLockStock(lockItem.getSkuId(), lockItem.getWareId(),
+                    lockItem.getSkuNum(), lockItem.getId());
+        }
+
+        log.info("订单超时等问题导致解锁库存成功");
+    }
+
     /**
      * 商品解锁方法
-     * @param skuId
-     * @param wareId
-     * @param skuNum
-     * @param lockDetailId
+     * TODO 修改成一条sql执行
+     * @param skuId 商品id
+     * @param wareId 仓库id
+     * @param skuNum 商品数量
+     * @param id 实体类id
      */
-    private void unLockStock(Long skuId, Long wareId, Integer skuNum, Long lockDetailId) {
-        wareSkuDao.unLockStock(skuId, wareId, skuNum);
-        log.info("商品skuId:" + skuId +
-                "\t数量:" + skuNum +
-                "\t仓库id:"+ wareId +
-                "解锁成功");
+    private void unLockStock(Long skuId, Long wareId, Integer skuNum, Long id) {
+        //TODO 上锁或者写成一条sql
+        WareOrderTaskDetailEntity entity = wareOrderTaskDetailService.getById(id);
+        if (entity.getLockStatus() == 1){
+            wareSkuDao.unLockStock(skuId, wareId, skuNum);
+            log.info("商品skuId:" + skuId +
+                    "\t数量:" + skuNum +
+                    "\t仓库id:"+ wareId +
+                    "解锁成功");
+            entity.setLockStatus(2);//已经解锁
+            wareOrderTaskDetailService.updateById(entity);
+        }
     }
 
 
@@ -270,26 +285,11 @@ public class WareSkuServiceImpl extends ServiceImpl<WareSkuDao, WareSkuEntity> i
                             "\t仓库id:"+ stockDetailTo.getWareId() +
                             "锁定,发送消息");
                     skuStocked = true;
-//                    WareOrderTaskDetailEntity productLockDetailEntity = WareOrderTaskDetailEntity.builder()
-//                            .skuId(skuId)
-//                            .skuName("")
-//                            .skuNum(oneProductSubmitDetail.getNum())
-//                            .taskId(wareOrderTaskEntity.getId())
-//                            .build();
-//                    wareOrderTaskDetailService.save(productLockDetailEntity);
-//                    //TODO 告诉MQ库存锁定成功
-//                    StockLockedTo lockedTo = new StockLockedTo();
-//                    lockedTo.setId(wareOrderTaskEntity.getId());
-//                    StockDetailTo detailTo = new StockDetailTo();
-//                    BeanUtils.copyProperties(productLockDetailEntity,detailTo);
-//                    lockedTo.setDetailTo(detailTo);
-//                    rabbitTemplate.convertAndSend("stock-event-exchange","stock.locked",lockedTo);
                     break;
                 } else {
                     //当前仓库锁失败，重试下一个仓库
                 }
             }
-
             if (skuStocked == false) {
                 //当前商品所有仓库都没有锁住
                 throw new RuntimeException("没有任何仓库有这个商品的库存" + skuId);
