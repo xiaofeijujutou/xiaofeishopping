@@ -3,6 +3,9 @@ package com.xiaofei.xiaofeimall.order.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.xiaofei.common.utils.PageUtils;
 import com.xiaofei.xiaofeimall.order.entity.OrderEntity;
+import com.xiaofei.xiaofeimall.order.vo.OrderConfirmVo;
+import com.xiaofei.xiaofeimall.order.vo.SubmitOrderResponseVo;
+import com.xiaofei.xiaofeimall.order.vo.SubmitOrderVo;
 
 import java.util.Map;
 
@@ -16,5 +19,12 @@ import java.util.Map;
 public interface OrderService extends IService<OrderEntity> {
 
     PageUtils queryPage(Map<String, Object> params);
+
+    OrderConfirmVo toTrade();
+
+    SubmitOrderResponseVo submitOrder(SubmitOrderVo submitOrderVo);
+
+    OrderEntity getOrderStatus(String orderSn);
+
 }
 

@@ -1,7 +1,7 @@
 package com.xiaofei.xiaofeimall.auth.service.impl;
 
 import com.xiaofei.common.constant.AuthServerConstant;
-import com.xiaofei.common.exception.BizCodeEnume;
+import com.xiaofei.common.exception.BizCodeEnum;
 import com.xiaofei.common.utils.R;
 import com.xiaofei.xiaofeimall.auth.feign.ThirdPartFeignService;
 import com.xiaofei.xiaofeimall.auth.service.SmsSendCodeService;
@@ -42,7 +42,7 @@ public class SmsSendCodeServiceImpl implements SmsSendCodeService {
         if (!StringUtils.isEmpty(redisCode) &&
                 System.currentTimeMillis() - Long.parseLong(redisCode.split("_")[1]) < 60 * 1000) {
             log.error("验证码发送频率过高");
-            return R.error(BizCodeEnume.SMS_CODE_EXCEPTION.getCode(), "验证码发送频率过高");
+            return R.error(BizCodeEnum.SMS_CODE_EXCEPTION.getCode(), "验证码发送频率过高");
         }
         //如果超过一分钟,可以重新发送;
         String code = Integer.toString(ThreadLocalRandom.current().nextInt(1000, 999999));

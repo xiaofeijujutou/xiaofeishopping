@@ -10,7 +10,7 @@ package com.xiaofei.common.utils;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
-import com.xiaofei.common.exception.BizCodeEnume;
+import com.xiaofei.common.exception.BizCodeEnum;
 import org.apache.http.HttpStatus;
 
 import java.util.HashMap;
@@ -34,6 +34,12 @@ public class R extends HashMap<String, Object> {
 		String s = JSON.toJSONString(data);
 		return JSON.parseObject(s, typeReference);
 	}
+	//利用fastJson对远程调用的实体类进行逆转(参数为class)
+	public <T>T getData( Class<T> clazz){
+		Object data = get("data");//默认map
+		String s = JSON.toJSONString(data);//转换成String
+		return JSON.parseObject(s, clazz);
+	}
 	//利用fastJson对远程调用的实体类进行逆转
 	public <T>T getDataByKey(String key,TypeReference<T> typeReference){
 		Object data = get(key);//默认map
@@ -50,7 +56,7 @@ public class R extends HashMap<String, Object> {
 
 
 	public R() {
-		put("code", BizCodeEnume.SUCCESS_CODE.getCode());
+		put("code", BizCodeEnum.SUCCESS_CODE.getCode());
 		put("msg", "success");
 	}
 
