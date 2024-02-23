@@ -6,7 +6,7 @@ import com.alibaba.fastjson.TypeReference;
 import com.google.common.collect.Maps;
 import com.xiaofei.common.constant.AuthServerConstant;
 import com.xiaofei.common.constant.MemberConstant;
-import com.xiaofei.common.exception.BizCodeEnume;
+import com.xiaofei.common.exception.BizCodeEnum;
 import com.xiaofei.common.utils.R;
 import com.xiaofei.xiaofeimall.auth.config.WeiboOauthProperties;
 import com.xiaofei.xiaofeimall.auth.feign.MemberPartFeignService;
@@ -84,7 +84,7 @@ public class UserLoginServiceImpl implements UserLoginService {
         //远程调用member
         R r = memberPartFeignService.weiboOauthLogin(weiboAccessTokenVo);
         //微博登录失败,重定向到登录页面
-        if (r.getCode() != BizCodeEnume.SUCCESS_CODE.getCode()) {
+        if (r.getCode() != BizCodeEnum.SUCCESS_CODE.getCode()) {
             return "redirect:http://auth.xiaofeimall.com";
         }
         //登录成功,添加重定向参数,这里已经跨域了,所以这里要使用分布式Session;
