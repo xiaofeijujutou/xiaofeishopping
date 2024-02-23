@@ -1,6 +1,6 @@
 package com.xiaofei.xiaofeimall.cart.exception;
 
-import com.xiaofei.common.exception.BizCodeEnume;
+import com.xiaofei.common.exception.BizCodeEnum;
 import com.xiaofei.common.utils.R;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -16,6 +16,6 @@ public class CartExceptionHandler {
     @ExceptionHandler(value = Exception.class)
     public R handleException(Exception e){
         e.printStackTrace();
-        return R.error(BizCodeEnume.UNKNOW_EXCEPTION.getCode(), BizCodeEnume.UNKNOW_EXCEPTION.getMsg());
+        return R.error(BizCodeEnum.UNKNOW_EXCEPTION.getCode(), BizCodeEnum.UNKNOW_EXCEPTION.getMsg());
     }
 }

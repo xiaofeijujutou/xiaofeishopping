@@ -1,7 +1,7 @@
 package com.xiaofei.xiaofeimall.search.controller;
 
 
-import com.xiaofei.common.exception.BizCodeEnume;
+import com.xiaofei.common.exception.BizCodeEnum;
 import com.xiaofei.common.utils.R;
 import com.xiaofei.common.vo.es.SkuEsModel;
 import com.xiaofei.xiaofeimall.search.service.ProductSaveService;
@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.io.IOException;
 import java.util.List;
 
 @Slf4j
@@ -38,7 +37,7 @@ public class ElasticSearchSaveController {
         if (!b) {
             return R.ok();
         } else {
-            return R.error(BizCodeEnume.PRODUCT_UP_EXCEPTION.getCode(), BizCodeEnume.PRODUCT_UP_EXCEPTION.getMsg());
+            return R.error(BizCodeEnum.PRODUCT_UP_EXCEPTION.getCode(), BizCodeEnum.PRODUCT_UP_EXCEPTION.getMsg());
         }
     }
 }

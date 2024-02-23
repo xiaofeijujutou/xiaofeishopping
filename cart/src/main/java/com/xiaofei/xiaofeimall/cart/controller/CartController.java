@@ -101,8 +101,14 @@ public class CartController {
      * @return
      */
     @GetMapping("/countItem")
-    public String countItem(@RequestParam("skuId") Long skuId, @RequestParam("num") Integer num){
-        cartService.countItem(skuId, num);
+    public String countItem(@RequestParam("skuId") Long skuId,
+                            @RequestParam("num") Integer num){
+        try {
+            cartService.countItem(skuId, num);
+        }catch (NullPointerException e){
+            log.error("用户登录过期");
+            return "redirect:http://auth.xiaofeimall.com/login.html";
+        }
         return "redirect:http://cart.xiaofeimall.com/cartList.html";
     }
 

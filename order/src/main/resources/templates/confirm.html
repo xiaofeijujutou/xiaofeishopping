@@ -9,7 +9,7 @@
 		<title></title>
 	</head>
 
-	<body>
+	<p>
 		<!--顶部-->
 		<header>
 			<div class="header">
@@ -340,7 +340,7 @@
 		</div>
 
 
-		<p class="p1">填写并核对订单信息</p>
+		<p class="p1">填写并核对订单信息   <span style="color: red" th:if="${msg!=null}" th:text="${msg}"></span></p>
 		<div class="section">
 			<!--收货人信息-->
 			<div class="top-2">
@@ -486,8 +486,12 @@
 				<p class="yfze_b">寄送至： <span id="receiveAddressEle"></span>收货人：<span id="receiverEle"></span></p>
 			</div>
 
-
-			<button class="tijiao">提交订单</button>
+			<form action="http://order.xiaofeimall.com/submitOrder" method="post">
+				<input id="addrInput" type="hidden" name="addrId" />
+				<input id="payPriceInput" type="hidden" name="payPrice">
+				<input type="hidden" name="orderToken" th:value="${order.orderToken}">
+				<button class="tijiao" type="submit">提交订单</button>
+			</form>
 		</div>
 		</div>
 

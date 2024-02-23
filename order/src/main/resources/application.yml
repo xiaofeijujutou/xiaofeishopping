@@ -20,3 +20,17 @@ mybatis-plus:
 server:
   port: 9000
 # springSession过期时间
+
+
+seata:
+  config:
+    # support: nacos 、 consul 、 apollo 、 zk  、 etcd3
+    type: nacos
+    nacos:
+      server-addr: 127.0.0.1:8848
+      namespace: public
+      group: DEFAULT_GROUP
+
+      ##if use MSE Nacos with auth, mutex with username/password attribute
+      #access-key:
+      #secret-key:

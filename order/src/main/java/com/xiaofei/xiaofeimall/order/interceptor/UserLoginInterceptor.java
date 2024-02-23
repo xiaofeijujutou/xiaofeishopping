@@ -4,6 +4,7 @@ import com.xiaofei.common.constant.AuthServerConstant;
 import com.xiaofei.common.vo.MemberEntityVo;
 import com.xiaofei.xiaofeimall.order.config.OrderThreadLocal;
 import org.springframework.stereotype.Component;
+import org.springframework.util.AntPathMatcher;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -11,6 +12,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -23,7 +26,14 @@ import java.io.IOException;
 @Component
 public class UserLoginInterceptor implements HandlerInterceptor {
 
-
+    private static final List<String> matchUris = new ArrayList<>();
+    private static final AntPathMatcher antPathMatcher = new AntPathMatcher();
+    static {
+        /**
+         * 还要加其他的路径配置就在这里加
+         */
+        UserLoginInterceptor.matchUris.add("/order/order/status/**");
+    }
     /**
      * 前置拦截,要判断用户是否登录了,登录才给放行
      * @param request
@@ -34,6 +44,10 @@ public class UserLoginInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response,
                              Object handler) {
+        if(matchWhiteName(request)){
+            return true;
+        }
+
         HttpSession session = request.getSession();
         MemberEntityVo member = (MemberEntityVo) session.getAttribute(AuthServerConstant.OAUTH_SESSION_PREFIX);
         if (member == null){
@@ -48,6 +62,23 @@ public class UserLoginInterceptor implements HandlerInterceptor {
         //不为空,存入ThreadLocal;
         OrderThreadLocal.orderUserInfoThreadLocal.set(member);
         return true;
+    }
+
+    /**
+     * 本地服务放行白名单
+     * @param request
+     * @return true为放行,false为不放行
+     */
+    private boolean matchWhiteName(HttpServletRequest request) {
+        boolean resultBoolean = false;
+        //只要能匹配任意一个,就放行
+        for (String uri : matchUris) {
+            if (antPathMatcher.match(uri, request.getRequestURI())){
+                resultBoolean = true;
+                break;
+            }
+        }
+        return resultBoolean;
     }
 
 

@@ -2,7 +2,7 @@ package com.xiaofei.xiaofeimall.member.service.impl;
 
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.xiaofei.common.constant.MemberConstant;
-import com.xiaofei.common.exception.BizCodeEnume;
+import com.xiaofei.common.exception.BizCodeEnum;
 import com.xiaofei.common.utils.R;
 import com.xiaofei.xiaofeimall.member.constant.OauthConstant;
 import com.xiaofei.xiaofeimall.member.dao.MemberLevelDao;
@@ -78,12 +78,12 @@ public class MemberServiceImpl extends ServiceImpl<MemberDao, MemberEntity> impl
             return R.ok();
         }
         if (vo.getPhone() != null && memberEntity.getMobile().equals(vo.getPhone())){
-            return R.error(BizCodeEnume.USER_PHONE_EXIST_EXCEPTION.getCode(),
-                    BizCodeEnume.USER_PHONE_EXIST_EXCEPTION.getMsg());
+            return R.error(BizCodeEnum.USER_PHONE_EXIST_EXCEPTION.getCode(),
+                    BizCodeEnum.USER_PHONE_EXIST_EXCEPTION.getMsg());
         }
         if (vo.getUserName() != null && memberEntity.getUsername().equals(vo.getUserName())){
-            return R.error(BizCodeEnume.USER_NAME_EXIST_EXCEPTION.getCode(),
-                    BizCodeEnume.USER_NAME_EXIST_EXCEPTION.getMsg());
+            return R.error(BizCodeEnum.USER_NAME_EXIST_EXCEPTION.getCode(),
+                    BizCodeEnum.USER_NAME_EXIST_EXCEPTION.getMsg());
         }
         return R.error("参数不能为空");
     }
@@ -101,13 +101,13 @@ public class MemberServiceImpl extends ServiceImpl<MemberDao, MemberEntity> impl
                 .eq("mobile", vo.getLoginAccount()));
         //账号不存在
         if (memberEntity == null){
-            return R.error(BizCodeEnume.USER_LOGIN_ACCOUNT_NOT_EXIST_EXCEPTION.getCode(),
-                    BizCodeEnume.USER_LOGIN_ACCOUNT_NOT_EXIST_EXCEPTION.getMsg());
+            return R.error(BizCodeEnum.USER_LOGIN_ACCOUNT_NOT_EXIST_EXCEPTION.getCode(),
+                    BizCodeEnum.USER_LOGIN_ACCOUNT_NOT_EXIST_EXCEPTION.getMsg());
         }
         //密码错误
         if (!bCryptPasswordEncoder.matches(vo.getLoginPassword(), memberEntity.getPassword())){
-            return R.error(BizCodeEnume.USER_LOGIN_PASSWORD_EXCEPTION.getCode(),
-                    BizCodeEnume.USER_LOGIN_PASSWORD_EXCEPTION.getMsg());
+            return R.error(BizCodeEnum.USER_LOGIN_PASSWORD_EXCEPTION.getCode(),
+                    BizCodeEnum.USER_LOGIN_PASSWORD_EXCEPTION.getMsg());
         }
         //登录成功
         return R.ok().put("member", memberEntity);

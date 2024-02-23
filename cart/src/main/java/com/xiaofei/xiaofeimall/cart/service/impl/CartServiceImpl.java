@@ -21,6 +21,8 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -276,7 +278,7 @@ public class CartServiceImpl implements CartService {
      * @return
      */
     @Override
-    public void countItem(Long skuId, Integer num) {
+    public void countItem(Long skuId, Integer num) throws NullPointerException{
         BoundHashOperations<String, Object, Object> hashOperations = getHashOperations();
         CartItem cartItem = getCartItem(skuId, hashOperations);
         cartItem.setCount(num);
